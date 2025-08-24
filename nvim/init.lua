@@ -91,9 +91,9 @@ require("lazy").setup({
         -- Make telescope windows vertical
         layout_strategy = "vertical",
         layout_config = {
-          width = 0.8,
+          width = 0.9,
           height = 0.9,
-          preview_height = 0.6,
+          preview_height = 0.4,
         },
       },
     })
@@ -311,27 +311,27 @@ require("lazy").setup({
       desc = "Diagnostics (Trouble)",
     },
     {
-      "<leader>mx",
+      "<leader>xx",
       "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
       desc = "Buffer Diagnostics (Trouble)",
     },
     {
-      "<leader>ms",
+      "<leader>xs",
       "<cmd>Trouble symbols toggle focus=false<cr>",
       desc = "Symbols (Trouble)",
     },
     {
-      "<leader>ml",
+      "<leader>xl",
       "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
       desc = "LSP Definitions / references / ... (Trouble)",
     },
     {
-      "<leader>mL",
+      "<leader>xL",
       "<cmd>Trouble loclist toggle<cr>",
       desc = "Location List (Trouble)",
     },
     {
-      "<leader>mQ",
+      "<leader>xQ",
       "<cmd>Trouble qflist toggle<cr>",
       desc = "Quickfix List (Trouble)",
     },
