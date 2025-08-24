@@ -1,0 +1,39 @@
+;; Right hand symbols layer "v" to activate
+;; Left hand number layer "m" to activate
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+  1    2    3    4    5    6    7    8    9    0 min =
+  q    w    e    r    t    y    u    i    o    p    [    ]    
+  a    s    d    f    g    h    j    k    l    ;    '
+  \ z    x    c    v    b    n    m    ,    .    /
+)
+
+(deflayer base
+  1    2    3    4    5    6    7    8    9    0 min =
+  q    w    e    r    t    y    u    i    o    p    [    ]    
+  a    s    d    f    g    h    j    k    l    ;    '
+  \ z    x    c    @sym-layer    b    n    @num-layer    ,    .    /
+)
+
+(deflayer symbols
+  _    _    _    _    _    _    _    _    _    _  _    _ 
+  _    _    _    _    _    _    S-[  S-]  [    ]  _    _    
+  _    _    _    _    _    S-7  min  S-min =   +  _ 
+  _    _    _    _    _    _    S-8  S-IntlBackslash S-,  S-.  _
+)
+
+(deflayer numbers
+  _    _    _    _    _    _    _    _    _    _    _    _
+  1    2    3    4    5    _    _    _    _    _    _    _
+  6    7    8    9    0    _    _    _    _    _    _
+  _    _    S-2  S-9  S-0  _    _    _    _    _    _
+)
+
+(defalias
+  sym-layer (tap-hold 170 170 v (layer-toggle symbols))
+  num-layer (tap-hold 170 170 m (layer-toggle numbers))
+)
