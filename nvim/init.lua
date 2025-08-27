@@ -78,7 +78,6 @@ require("lazy").setup({
   tag = '0.1.8',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    'debugloop/telescope-undo.nvim',
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       build = 'make'
@@ -99,10 +98,7 @@ require("lazy").setup({
     })
 
     require('telescope').load_extension('fzf')
-    require('telescope').load_extension('undo')
 
-    -- Undo tree bind
-    vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<cr>")
     -- Telescope binds
     local builtin = require('telescope.builtin')
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
@@ -110,6 +106,16 @@ require("lazy").setup({
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
     vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Help tags' })
   end,
+},
+
+    -- Undotree
+{
+  'mbbill/undotree',
+  config = function()
+    vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+    vim.g.undotree_SetFocusWhenToggle = 1
+    vim.g.undotree_DiffpanelHeight = 0
+  end
 },
 
     -- Markdown preview
@@ -355,7 +361,7 @@ require("lazy").setup({
     signature = {
       enabled = true,
       trigger = {
-        blocked_trigger_characters = {},
+        blocked_trigger_characters = {"<>"},
         blocked_retrigger_characters = {},
         show_on_insert_on_trigger_character = true,
       },
@@ -367,7 +373,10 @@ require("lazy").setup({
     },
 
     completion = {
-    documentation = { auto_show = false },
+    documentation = {
+      auto_show = true,
+      auto_show_delay_ms = 1500,
+        },
     trigger = {
       show_on_trigger_character = true,
       show_on_insert_on_trigger_character = true,
@@ -388,6 +397,13 @@ require("lazy").setup({
 },
 -- LAZY END
 })
+
+-- Fast highlight clear
+vim.keymap.set('n', '<leader>c', '<cmd>nohlsearch<CR>')
+
+-- Persistent undo history
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath('data') .. '/undo'
 
 -- Limit diagnostic noise
 vim.diagnostic.config({
