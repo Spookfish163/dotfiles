@@ -72,6 +72,34 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugin setup
 require("lazy").setup({
 
+    -- Toggleterm
+{
+  'akinsho/toggleterm.nvim',
+  tag = "v2.*",
+  config = function()
+    require("toggleterm").setup()
+    size = 25,
+    vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
+    vim.keymap.set('t', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
+  end
+},
+
+    -- Oil file manager
+{
+  'stevearc/oil.nvim',
+  opts = {},
+  dependencies = { { "echasnovski/mini.icons", opts = {} } },
+  lazy = false,
+  config = function()
+    require("oil").setup({
+      keymaps = {
+        ["<leader>o"] = "actions.close",
+      },
+    })
+    vim.keymap.set("n", "<leader>o", "<CMD>Oil<CR>", { desc = "Open oil file manager" })
+  end
+},
+
     -- Telescope fuzzy finder
 {
   'nvim-telescope/telescope.nvim',
@@ -81,7 +109,8 @@ require("lazy").setup({
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       build = 'make'
-    }
+    },
+    'jvgrootveld/telescope-zoxide'
   },
   config = function()
     require('telescope').setup({
@@ -98,7 +127,10 @@ require("lazy").setup({
     })
 
     require('telescope').load_extension('fzf')
+    require('telescope').load_extension('zoxide')
 
+    -- Telescope zoxide bind
+    vim.keymap.set('n', '<leader>z', require('telescope').extensions.zoxide.list, { desc = 'Zoxide directories' })
     -- Telescope binds
     local builtin = require('telescope.builtin')
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
@@ -141,56 +173,19 @@ require("lazy").setup({
     end
 },
 
-    -- Tree file explorer
-{
-  "nvim-tree/nvim-tree.lua",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
-  config = function()
-    require("nvim-tree").setup({
-      view = {
-        width = 32,
-        side = "left",
-        number = true,
-        relativenumber = true,
-      },
-      renderer = {
-        add_trailing = false,
-        group_empty = false,
-        highlight_git = false,
-        highlight_opened_files = "none",
-        root_folder_modifier = ":~",
-        indent_markers = {
-          enable = false,
-        },
-        icons = {
-          webdev_colors = true,
-        },
-      },
-      filters = {
-        dotfiles = false,
-      },
-      git = {
-        enable = true,
-        ignore = true,
-        timeout = 400,
-      },
-    })
-    vim.keymap.set('n', '<F8>', ':NvimTreeToggle<CR>')
-  end,
-},
-
 -- Auto Pairs
 {
   "windwp/nvim-autopairs",
   config = function()
     require("nvim-autopairs").setup({
-                fast_wrap = {
-                    map = '<C-e>',
-                    before_key = "h",
-                    after_key = "l",
-                    cursor_pos_before = false,
-                }
-            })
+        fast_wrap = {
+            map = '<C-e>',
+            before_key = "h",
+            after_key = "l",
+            cursor_pos_before = false,
+            manual_position = false,
+            }
+        })
     vim.keymap.set('n', '<C-P>', function()
       require("nvim-autopairs").toggle()
     end)
@@ -385,7 +380,7 @@ require("lazy").setup({
         auto_show = true,
         },
     list = {
-        max_items = 5,
+        max_items = 8,
         },
     },
     sources = {
@@ -395,7 +390,7 @@ require("lazy").setup({
   },
   opts_extend = { "sources.default" }
 },
--- LAZY END
+-- Plugin setup end
 })
 
 -- Fast highlight clear
@@ -415,7 +410,7 @@ vim.diagnostic.config({
 })
 
 -- Debug toggle
-vim.keymap.set('n', '<leader>td', function()
+vim.keymap.set('n', '<leader>d', function()
   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { silent = true, noremap = true })
 
