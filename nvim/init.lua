@@ -72,6 +72,20 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugin setup
 require("lazy").setup({
 
+    -- Scribble notes
+{
+   'AnkushRoy-code/scribble.nvim',
+   event = "VeryLazy",
+   config = function()
+       local scribble = require("scribble")
+       scribble.setup({
+           pos = "center",
+           filetype = "markdown",
+       })
+       vim.keymap.set("n", "<leader>s", scribble.toggle, { desc = "Toggle Scribble" })
+   end,
+},
+
     -- Toggleterm
 {
   'akinsho/toggleterm.nvim',
@@ -80,7 +94,7 @@ require("lazy").setup({
     require("toggleterm").setup()
     size = 25,
     vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
-    vim.keymap.set('t', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
+    vim.keymap.set('t', '<Esc>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
   end
 },
 
@@ -94,6 +108,7 @@ require("lazy").setup({
     require("oil").setup({
       keymaps = {
         ["<leader>o"] = "actions.close",
+        ["<Tab>"] = "actions.select",
       },
     })
     vim.keymap.set("n", "<leader>o", "<CMD>Oil<CR>", { desc = "Open oil file manager" })
@@ -124,6 +139,23 @@ require("lazy").setup({
           preview_height = 0.4,
         },
       },
+    -- Change default telescope zoxide behaviour to edit instead of cd
+    extensions = {
+        zoxide = {
+          mappings = {
+            default = {
+              action = function(selection)
+                vim.cmd.edit(selection.path)
+              end
+            },
+            ["<Tab>"] = {
+                action = function(selection)
+                    vim.cmd.edit(selection.path)
+                end
+            },
+          }
+        }
+      }
     })
 
     require('telescope').load_extension('fzf')
@@ -210,10 +242,6 @@ require("lazy").setup({
     })
   end,
 },
-
--- Color schemes
-{ "loctvl842/monokai-pro.nvim" },
-{ "sainnhe/gruvbox-material" },
 
 -- LSP Configuration
 {
@@ -317,7 +345,7 @@ require("lazy").setup({
       desc = "Buffer Diagnostics (Trouble)",
     },
     {
-      "<leader>xs",
+      "<leader>h",
       "<cmd>Trouble symbols toggle focus=false<cr>",
       desc = "Symbols (Trouble)",
     },
@@ -390,6 +418,12 @@ require("lazy").setup({
   },
   opts_extend = { "sources.default" }
 },
+
+-- Colour schemes
+{ "loctvl842/monokai-pro.nvim" },
+{ "sainnhe/gruvbox-material" },
+{ "sainnhe/sonokai" },
+
 -- Plugin setup end
 })
 
@@ -420,5 +454,5 @@ vim.g.gruvbox_material_foreground = "material"
 -- Set background contrast: "hard", "medium", or "soft"
 vim.g.gruvbox_material_background = "soft"
 
--- Set colorscheme
+-- Set colourscheme
 vim.cmd.colorscheme("gruvbox-material")
