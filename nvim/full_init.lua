@@ -56,10 +56,10 @@ vim.keymap.set({'n', 'v'}, '<leader>P', '"+P', { desc = 'Paste before from syste
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 
 -- Obsidian mappings
-vim.keymap.set("n", "<leader>nn", "<cmd>Obsidian new note<cr>", { desc = "New Obsidian note" })
-vim.keymap.set("n", "<leader>nb", "<cmd>Obsidian backlinks<cr>", { desc = "Show backlinks" })
-vim.keymap.set("n", "<leader>nt", "<cmd>Obsidian tags<cr>", { desc = "Browse tags" })
-vim.keymap.set("n", "<leader>nf", "<cmd>Obsidian quick_switch<cr>", { desc = "Quick switch notes" })
+vim.keymap.set("n", "<leader>nn", "<cmd>ObsidianNew<cr>", { desc = "New Obsidian note" })
+vim.keymap.set("n", "<leader>nb", "<cmd>ObsidianBacklinks<cr>", { desc = "Show backlinks" })
+vim.keymap.set("n", "<leader>nt", "<cmd>ObsidianTags<cr>", { desc = "Browse tags" })
+vim.keymap.set("n", "<leader>nf", "<cmd>ObsidianQuickSwitch<cr>", { desc = "Quick switch notes" })
 
 -- Bootstrap lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -81,9 +81,8 @@ require("lazy").setup({
     -- Obsidian nvim
 {
   "epwalsh/obsidian.nvim",
-  version = "*",
-  lazy = true,
-  cmd = { "Obsidian" },
+  version = "3.13.1",
+  lazy = false,
   ft = "markdown",
   dependencies = {
     "nvim-lua/plenary.nvim",
@@ -91,11 +90,11 @@ require("lazy").setup({
   opts = {
     workspaces = {
       {
-        name = "main",
-        path = "~/Documents/syncing_folder/Obsidian_Vaults/Linux_Vault/",
+        name = "Personal",
+        path = "~/Documents/syncing_folder/Obsidian_Vaults/Personal/",
         strict = true,
         overrides = {
-            notes_subdir = "Notes",
+            notes_subdir = "Zettel",
         },
       },
     },
@@ -109,23 +108,32 @@ require("lazy").setup({
       blink = true,
       min_chars = 2,
     },
-    notes_subdir = "Notes",
-    new_notes_location = "Notes",
+    notes_subdir = "Zettel",
+    new_notes_location = "notes_subdir",
 
     -- Simple note ID generation
     note_id_func = function(title)
-      return title
-    end,
+        local suffix = ""
+        if title ~= nil then
+          -- If title is given, transform it into valid file name.
+          suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+        else
+          -- If title is nil, just add 4 random uppercase letters to the suffix.
+          for _ = 1, 4 do
+            suffix = suffix .. string.char(math.random(65, 90))
+          end
+        end
+        return tostring(os.time()) .. "-" .. suffix
+      end,
 
     templates = {
-      subdir = "Templates",
+      folder = "Templates",
       date_format = "%Y-%m-%d",
       time_format = "%H:%M",
     },
 
-    legacy_commands = false,
     ui = { enable = false },
-    finder = "telescope.nvim",
+    picker = { name = "telescope.nvim" },
     sort_by = "modified",
     sort_reversed = true,
     search_max_lines = 1000,
@@ -155,7 +163,13 @@ require("lazy").setup({
    config = function()
        local scribble = require("scribble")
        scribble.setup({
-           pos = "center",
+            pos = "center",
+            extension = ".md",
+            width = 90,
+            height = 43,
+            auto_save = true,
+            path = "/var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Scribbles/",
+            encoding = "underscore",
        })
        vim.keymap.set("n", "<leader>s", scribble.toggle, { desc = "Toggle Scribble" })
    end,
@@ -164,7 +178,7 @@ require("lazy").setup({
     -- Toggleterm
 {
   'akinsho/toggleterm.nvim',
-  tag = "v2.*",
+  version = "2.*",
   config = function()
     require("toggleterm").setup()
     size = 25,
@@ -210,7 +224,9 @@ require("lazy").setup({
             ["<Tab>"] = require('telescope.actions').select_default,
           },
         },
-        file_ignore_patterns = { "%.git/", "node_modules/", "__pycache__/", "Daily Notes/" },
+        file_ignore_patterns = {
+            "%.git/", "node_modules/", "__pycache__/", "zArchive/",
+            },
         -- Make telescope windows vertical
         layout_strategy = "vertical",
         layout_config = {
