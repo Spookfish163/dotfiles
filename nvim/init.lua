@@ -55,6 +55,12 @@ vim.keymap.set({'n', 'v'}, '<leader>P', '"+P', { desc = 'Paste before from syste
 -- Cursor shapes for different modes
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 
+-- Obsidian mappings
+vim.keymap.set("n", "<leader>nn", "<cmd>Obsidian new note<cr>", { desc = "New Obsidian note" })
+vim.keymap.set("n", "<leader>nb", "<cmd>Obsidian backlinks<cr>", { desc = "Show backlinks" })
+vim.keymap.set("n", "<leader>nt", "<cmd>Obsidian tags<cr>", { desc = "Browse tags" })
+vim.keymap.set("n", "<leader>nf", "<cmd>Obsidian quick_switch<cr>", { desc = "Quick switch notes" })
+
 -- Bootstrap lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -72,6 +78,76 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugin setup
 require("lazy").setup({
 
+    -- Obsidian nvim
+{
+  "epwalsh/obsidian.nvim",
+  version = "*",
+  lazy = true,
+  cmd = { "Obsidian" },
+  ft = "markdown",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  opts = {
+    workspaces = {
+      {
+        name = "main",
+        path = "~/Documents/syncing_folder/Obsidian_Vaults/Linux_Vault/",
+        strict = true,
+        overrides = {
+            notes_subdir = "Notes",
+        },
+      },
+    },
+      daily_notes = {
+      folder = "Daily Notes",
+      date_format = "%Y-%m-%d",
+      alias_format = "%B %-d, %Y",
+    },
+    completion = {
+      nvim_cmp = false,
+      blink = true,
+      min_chars = 2,
+    },
+    notes_subdir = "Notes",
+    new_notes_location = "Notes",
+
+    -- Simple note ID generation
+    note_id_func = function(title)
+      return title
+    end,
+
+    templates = {
+      subdir = "Templates",
+      date_format = "%Y-%m-%d",
+      time_format = "%H:%M",
+    },
+
+    legacy_commands = false,
+    ui = { enable = false },
+    finder = "telescope.nvim",
+    sort_by = "modified",
+    sort_reversed = true,
+    search_max_lines = 1000,
+    open_notes_in = "current",
+
+    -- Callback to set up keymaps when entering a note
+    callbacks = {
+      enter_note = function(_, note)
+        -- Remove default Enter mapping and add Tab for smart_action
+        vim.keymap.del("n", "<CR>", { buffer = note.bufnr })
+        vim.keymap.set("n", "<Tab>", function()
+          return require("obsidian").util.smart_action()
+        end, {
+          buffer = note.bufnr,
+          desc = "Obsidian smart action",
+          expr = true,
+        })
+      end,
+    },
+  },
+},
+
     -- Scribble notes
 {
    'AnkushRoy-code/scribble.nvim',
@@ -80,7 +156,6 @@ require("lazy").setup({
        local scribble = require("scribble")
        scribble.setup({
            pos = "center",
-           filetype = "markdown",
        })
        vim.keymap.set("n", "<leader>s", scribble.toggle, { desc = "Toggle Scribble" })
    end,
@@ -130,7 +205,12 @@ require("lazy").setup({
   config = function()
     require('telescope').setup({
       defaults = {
-        file_ignore_patterns = { "%.git/", "node_modules/", "__pycache__/" },
+        mappings = {
+          i = {
+            ["<Tab>"] = require('telescope.actions').select_default,
+          },
+        },
+        file_ignore_patterns = { "%.git/", "node_modules/", "__pycache__/", "Daily Notes/" },
         -- Make telescope windows vertical
         layout_strategy = "vertical",
         layout_config = {
@@ -210,6 +290,9 @@ require("lazy").setup({
   "windwp/nvim-autopairs",
   config = function()
     require("nvim-autopairs").setup({
+        disable_filetype = {
+            "TelescopePrompt", "markdown"
+                },
         fast_wrap = {
             map = '<C-e>',
             before_key = "h",
@@ -408,7 +491,7 @@ require("lazy").setup({
         auto_show = true,
         },
     list = {
-        max_items = 8,
+        max_items = 10,
         },
     },
     sources = {
