@@ -56,14 +56,19 @@ vim.keymap.set({'n', 'v'}, '<leader>P', '"+P', { desc = 'Paste before from syste
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 
 -- Obsidian mappings
-vim.keymap.set("n", "<leader>nn", "<cmd>ObsidianNew<cr>", { desc = "New Obsidian note" })
+vim.keymap.set("n", "<leader>nn", "<cmd>ObsidianNew Zettel/<cr>", { desc = "New Zettel" })
+vim.keymap.set("n", "<leader>ne", "<cmd>ObsidianNew Notes/<cr>", { desc = "New Note" })
+vim.keymap.set("n", "<leader>na", "<cmd>ObsidianTemplate<cr>", { desc = "Add template" })
 vim.keymap.set("n", "<leader>nb", "<cmd>ObsidianBacklinks<cr>", { desc = "Show backlinks" })
-vim.keymap.set("n", "<leader>nt", "<cmd>ObsidianTags<cr>", { desc = "Browse tags" })
+vim.keymap.set("n", "<leader>ns", "<cmd>ObsidianTags<cr>", { desc = "Browse tags" })
 vim.keymap.set("n", "<leader>nf", "<cmd>ObsidianQuickSwitch<cr>", { desc = "Quick switch notes" })
+vim.keymap.set('n', '<leader>nt', function()
+  vim.cmd('edit /var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Todo/Todo.md')
+end, { desc = 'Open Todo' })
 
 -- Bootstrap lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -115,10 +120,8 @@ require("lazy").setup({
     note_id_func = function(title)
         local suffix = ""
         if title ~= nil then
-          -- If title is given, transform it into valid file name.
           suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
         else
-          -- If title is nil, just add 4 random uppercase letters to the suffix.
           for _ = 1, 4 do
             suffix = suffix .. string.char(math.random(65, 90))
           end
@@ -166,7 +169,7 @@ require("lazy").setup({
             pos = "center",
             extension = ".md",
             width = 90,
-            height = 43,
+            height = 42,
             auto_save = true,
             path = "/var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Scribbles/",
             encoding = "underscore",
@@ -177,14 +180,11 @@ require("lazy").setup({
 
     -- Toggleterm
 {
-  'akinsho/toggleterm.nvim',
-  version = "2.*",
-  config = function()
-    require("toggleterm").setup()
-    size = 25,
-    vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
-    vim.keymap.set('t', '<Esc>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
-  end
+    'akinsho/toggleterm.nvim',
+    version = "2.*",
+    opts = { size = 15 },
+    vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+    vim.keymap.set('t', '<Esc>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
 },
 
     -- Oil file manager
@@ -207,7 +207,7 @@ require("lazy").setup({
     -- Telescope fuzzy finder
 {
   'nvim-telescope/telescope.nvim',
-  tag = '0.1.8',
+  commit = 'b4da76be54691e854d3e0e02c36b0245f945c2c7',
   dependencies = {
     'nvim-lua/plenary.nvim',
     {
@@ -264,7 +264,7 @@ require("lazy").setup({
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
     vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Live grep' })
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
-    vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Help tags' })
+    vim.keymap.set('n', '<leader>fh', builtin.lsp_document_symbols, { desc = 'Find symbols' })
   end,
 },
 
@@ -301,21 +301,14 @@ require("lazy").setup({
     end
 },
 
--- Auto Pairs
+    -- Auto Pairs
 {
   "windwp/nvim-autopairs",
   config = function()
     require("nvim-autopairs").setup({
         disable_filetype = {
             "TelescopePrompt", "markdown"
-                },
-        fast_wrap = {
-            map = '<C-e>',
-            before_key = "h",
-            after_key = "l",
-            cursor_pos_before = false,
-            manual_position = false,
-            }
+            },
         })
     vim.keymap.set('n', '<C-P>', function()
       require("nvim-autopairs").toggle()
@@ -323,26 +316,32 @@ require("lazy").setup({
   end,
 },
 
--- Vim tmux manager
+    -- Vim tmux manager
 {
   "christoomey/vim-tmux-navigator",
   lazy = false,
 },
 
--- Syntax highlighting
+    -- Syntax highlighting
 {
   "nvim-treesitter/nvim-treesitter",
+  branch = 'master',
+  lazy = false,
   build = ":TSUpdate",
   config = function()
     require("nvim-treesitter.configs").setup({
       ensure_installed = { "python", "rust", "c", "bash", "lua", "query", "markdown", "markdown_inline" },
+      sync_install = false,
+      auto_install = true,
+      ignore_install = {},
+      modules = {},
       highlight = { enable = true },
       indent = { enable = true },
     })
   end,
 },
 
--- LSP Configuration
+    -- LSP Configuration
 {
   "neovim/nvim-lspconfig",
   config = function()
@@ -364,7 +363,7 @@ require("lazy").setup({
         }
       }
     })
-    -- Ruff server (Python linting)
+    -- Ruff server (Actually good Python linting)
     lspconfig.ruff.setup({
       capabilities = capabilities,
       init_options = {
@@ -427,39 +426,46 @@ require("lazy").setup({
   end,
 },
 
--- "Trouble" diagnostic viewing
+    -- "Trouble" diagnostic viewing
 {
   "folke/trouble.nvim",
-  opts = {},
+  opts = {
+    warn_no_results = false,
+    open_no_results = true,
+    win = {
+      size = 10,
+    },
+    modes = {
+      symbols = {
+        win = { size = 40 },
+      },
+    },
+    keys = {
+      ["<tab>"] = "jump",
+    },
+  },
   cmd = "Trouble",
   keys = {
+        -- Toggle virtual lines with trouble window
     {
       "<leader>m",
-      "<cmd>Trouble diagnostics toggle<cr>",
+        function()
+        local trouble = require("trouble")
+        local is_open = trouble.is_open("diagnostics")
+        vim.diagnostic.config({
+          virtual_lines = not is_open,
+        })
+        trouble.toggle("diagnostics")
+      end,
       desc = "Diagnostics (Trouble)",
     },
     {
-      "<leader>xx",
-      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-      desc = "Buffer Diagnostics (Trouble)",
-    },
-    {
       "<leader>h",
-      "<cmd>Trouble symbols toggle focus=false<cr>",
+      "<cmd>Trouble symbols toggle focus=true<cr>",
       desc = "Symbols (Trouble)",
     },
     {
-      "<leader>xl",
-      "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-      desc = "LSP Definitions / references / ... (Trouble)",
-    },
-    {
-      "<leader>xL",
-      "<cmd>Trouble loclist toggle<cr>",
-      desc = "Location List (Trouble)",
-    },
-    {
-      "<leader>xQ",
+      "<leader>xq",
       "<cmd>Trouble qflist toggle<cr>",
       desc = "Quickfix List (Trouble)",
     },
@@ -469,20 +475,17 @@ require("lazy").setup({
     -- Autocomplete
 {
   'saghen/blink.cmp',
-  -- optional: provides snippets for the snippet source
   dependencies = { 'rafamadriz/friendly-snippets' },
-
   version = '1.*',
   opts = {
     keymap = { preset = 'default' },
-
     appearance = {
       nerd_font_variant = 'mono'
     },
-
     signature = {
       enabled = true,
       trigger = {
+            -- had annoying lingering signature helper on these
         blocked_trigger_characters = {"<>"},
         blocked_retrigger_characters = {},
         show_on_insert_on_trigger_character = true,
@@ -493,7 +496,6 @@ require("lazy").setup({
         direction_priority = { "n" },
       },
     },
-
     completion = {
     documentation = {
       auto_show = true,
@@ -518,7 +520,7 @@ require("lazy").setup({
   opts_extend = { "sources.default" }
 },
 
--- Colour schemes
+    -- Colour schemes
 { "loctvl842/monokai-pro.nvim" },
 { "sainnhe/gruvbox-material" },
 { "sainnhe/sonokai" },
@@ -535,7 +537,8 @@ vim.opt.undodir = vim.fn.stdpath('data') .. '/undo'
 
 -- Limit diagnostic noise
 vim.diagnostic.config({
-  virtual_text = false,       -- Disable inline diagnostic text
+  virtual_text = false,       -- Disable virtual text
+  virtual_lines = false,      -- Disable virtual lines
   underline = false,          -- Disable underlines
   signs = true,               -- Keep gutter signs (W, H, E)
   update_in_insert = false,   -- Don't update diagnostics in insert mode

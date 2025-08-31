@@ -69,14 +69,11 @@ require("lazy").setup({
 
     -- Toggleterm
 {
-  'akinsho/toggleterm.nvim',
-  version = "2.*",
-  config = function()
-    require("toggleterm").setup()
-    size = 25,
-    vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
-    vim.keymap.set('t', '<Esc>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
-  end
+    'akinsho/toggleterm.nvim',
+    version = "2.*",
+    opts = { size = 15 },
+    vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+    vim.keymap.set('t', '<Esc>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
 },
 
     -- Oil file manager
@@ -94,49 +91,6 @@ require("lazy").setup({
     })
     vim.keymap.set("n", "<leader>o", "<CMD>Oil<CR>", { desc = "Open oil file manager" })
   end
-},
-
-    -- Telescope fuzzy finder
-{
-  'nvim-telescope/telescope.nvim',
-  tag = '0.1.8',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make'
-    },
-  },
-  config = function()
-    require('telescope').setup({
-      defaults = {
-        mappings = {
-          i = {
-            ["<Tab>"] = require('telescope.actions').select_default,
-          },
-        },
-        file_ignore_patterns = {
-            "%.git/", "node_modules/", "__pycache__/", "zArchive/",
-            },
-        -- Make telescope windows vertical
-        layout_strategy = "vertical",
-        layout_config = {
-          width = 0.9,
-          height = 0.9,
-          preview_height = 0.4,
-        },
-      },
-    })
-
-    require('telescope').load_extension('fzf')
-
-    -- Telescope binds
-    local builtin = require('telescope.builtin')
-    vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
-    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Live grep' })
-    vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
-    vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Help tags' })
-  end,
 },
 
     -- Undotree
@@ -159,21 +113,14 @@ require("lazy").setup({
     end
 },
 
--- Auto Pairs
+    -- Auto Pairs
 {
   "windwp/nvim-autopairs",
   config = function()
     require("nvim-autopairs").setup({
         disable_filetype = {
             "TelescopePrompt", "markdown"
-                },
-        fast_wrap = {
-            map = '<C-e>',
-            before_key = "h",
-            after_key = "l",
-            cursor_pos_before = false,
-            manual_position = false,
-            }
+            },
         })
     vim.keymap.set('n', '<C-P>', function()
       require("nvim-autopairs").toggle()
@@ -181,26 +128,32 @@ require("lazy").setup({
   end,
 },
 
--- Vim tmux manager
+    -- Vim tmux manager
 {
   "christoomey/vim-tmux-navigator",
   lazy = false,
 },
 
--- Syntax highlighting
+    -- Syntax highlighting
 {
   "nvim-treesitter/nvim-treesitter",
+  branch = 'master',
+  lazy = false,
   build = ":TSUpdate",
   config = function()
     require("nvim-treesitter.configs").setup({
       ensure_installed = { "python", "rust", "c", "bash", "lua", "query", "markdown", "markdown_inline" },
+      sync_install = false,
+      auto_install = true,
+      ignore_install = {},
+      modules = {},
       highlight = { enable = true },
       indent = { enable = true },
     })
   end,
 },
 
--- LSP Configuration
+    -- LSP Configuration
 {
   "neovim/nvim-lspconfig",
   config = function()
@@ -285,39 +238,46 @@ require("lazy").setup({
   end,
 },
 
--- "Trouble" diagnostic viewing
+    -- "Trouble" diagnostic viewing
 {
   "folke/trouble.nvim",
-  opts = {},
+  opts = {
+    warn_no_results = false,
+    open_no_results = true,
+    win = {
+      size = 10,
+    },
+    modes = {
+      symbols = {
+        win = { size = 40 },
+      },
+    },
+    keys = {
+      ["<tab>"] = "jump",
+    },
+  },
   cmd = "Trouble",
   keys = {
+        -- Toggle virtual lines with trouble window
     {
       "<leader>m",
-      "<cmd>Trouble diagnostics toggle<cr>",
+        function()
+        local trouble = require("trouble")
+        local is_open = trouble.is_open("diagnostics")
+        vim.diagnostic.config({
+          virtual_lines = not is_open,
+        })
+        trouble.toggle("diagnostics")
+      end,
       desc = "Diagnostics (Trouble)",
     },
     {
-      "<leader>xx",
-      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-      desc = "Buffer Diagnostics (Trouble)",
-    },
-    {
       "<leader>h",
-      "<cmd>Trouble symbols toggle focus=false<cr>",
+      "<cmd>Trouble symbols toggle focus=true<cr>",
       desc = "Symbols (Trouble)",
     },
     {
-      "<leader>xl",
-      "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-      desc = "LSP Definitions / references / ... (Trouble)",
-    },
-    {
-      "<leader>xL",
-      "<cmd>Trouble loclist toggle<cr>",
-      desc = "Location List (Trouble)",
-    },
-    {
-      "<leader>xQ",
+      "<leader>xq",
       "<cmd>Trouble qflist toggle<cr>",
       desc = "Quickfix List (Trouble)",
     },
@@ -327,17 +287,13 @@ require("lazy").setup({
     -- Autocomplete
 {
   'saghen/blink.cmp',
-  -- optional: provides snippets for the snippet source
   dependencies = { 'rafamadriz/friendly-snippets' },
-
   version = '1.*',
   opts = {
     keymap = { preset = 'default' },
-
     appearance = {
       nerd_font_variant = 'mono'
     },
-
     signature = {
       enabled = true,
       trigger = {
@@ -351,7 +307,6 @@ require("lazy").setup({
         direction_priority = { "n" },
       },
     },
-
     completion = {
     documentation = {
       auto_show = true,
@@ -376,7 +331,7 @@ require("lazy").setup({
   opts_extend = { "sources.default" }
 },
 
--- Colour schemes
+    -- Colour schemes
 { "loctvl842/monokai-pro.nvim" },
 { "sainnhe/gruvbox-material" },
 { "sainnhe/sonokai" },

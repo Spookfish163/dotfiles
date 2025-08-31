@@ -34,6 +34,6 @@
 )
 
 (defalias
-  sym-layer (tap-hold 175 175 v (layer-toggle symbols))
-  num-layer (tap-hold 175 175 m (layer-toggle numbers))
+  sym-layer (tap-hold 150 150 v (layer-toggle symbols))
+  num-layer (tap-hold 200 200 m (layer-toggle numbers))
 )
