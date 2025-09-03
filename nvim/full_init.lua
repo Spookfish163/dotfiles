@@ -55,13 +55,17 @@ vim.keymap.set({'n', 'v'}, '<leader>P', '"+P', { desc = 'Paste before from syste
 -- Cursor shapes for different modes
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 
+-- Jump to end of line without leaving insert mode
+vim.keymap.set('i', '<C-e>', '<End>', { desc = 'Jump to end of line' })
+
 -- Obsidian mappings
-vim.keymap.set("n", "<leader>nn", "<cmd>ObsidianNew Zettel/<cr>", { desc = "New Zettel" })
-vim.keymap.set("n", "<leader>ne", "<cmd>ObsidianNew Notes/<cr>", { desc = "New Note" })
+vim.keymap.set("n", "<leader>nn", "<cmd>ObsidianNew Brain/<cr>", { desc = "New brain note" })
+vim.keymap.set("n", "<leader>ne", "<cmd>ObsidianNew Notes/<cr>", { desc = "New ephemeral note" })
 vim.keymap.set("n", "<leader>na", "<cmd>ObsidianTemplate<cr>", { desc = "Add template" })
 vim.keymap.set("n", "<leader>nb", "<cmd>ObsidianBacklinks<cr>", { desc = "Show backlinks" })
 vim.keymap.set("n", "<leader>ns", "<cmd>ObsidianTags<cr>", { desc = "Browse tags" })
-vim.keymap.set("n", "<leader>nf", "<cmd>ObsidianQuickSwitch<cr>", { desc = "Quick switch notes" })
+vim.keymap.set("n", "<leader>nf", "<cmd>ObsidianSearch<cr>", { desc = "Search notes" })
+vim.keymap.set("n", "<leader>nc", "<cmd>ObsidianQuickSwitch<cr>", { desc = "Quick switch notes" })
 vim.keymap.set('n', '<leader>nt', function()
   vim.cmd('edit /var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Todo/Todo.md')
 end, { desc = 'Open Todo' })
@@ -99,7 +103,7 @@ require("lazy").setup({
         path = "~/Documents/syncing_folder/Obsidian_Vaults/Personal/",
         strict = true,
         overrides = {
-            notes_subdir = "Zettel",
+            notes_subdir = "Brain",
         },
       },
     },
@@ -113,7 +117,7 @@ require("lazy").setup({
       blink = true,
       min_chars = 2,
     },
-    notes_subdir = "Zettel",
+    notes_subdir = "Brain",
     new_notes_location = "notes_subdir",
 
     -- Simple note ID generation
@@ -130,7 +134,7 @@ require("lazy").setup({
       end,
 
     templates = {
-      folder = "Templates",
+      folder = "Utils/Templates",
       date_format = "%Y-%m-%d",
       time_format = "%H:%M",
     },
@@ -161,7 +165,7 @@ require("lazy").setup({
 
     -- Scribble notes
 {
-   'AnkushRoy-code/scribble.nvim',
+   'Spookfish163/scribble.nvim',
    event = "VeryLazy",
    config = function()
        local scribble = require("scribble")
@@ -223,6 +227,9 @@ require("lazy").setup({
           i = {
             ["<Tab>"] = require('telescope.actions').select_default,
           },
+          n = {
+            ["<Tab>"] = require('telescope.actions').select_default,
+          },
         },
         file_ignore_patterns = {
             "%.git/", "node_modules/", "__pycache__/", "zArchive/",
@@ -262,7 +269,13 @@ require("lazy").setup({
     -- Telescope binds
     local builtin = require('telescope.builtin')
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
-    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Live grep' })
+    vim.keymap.set('n', '<leader>fF', function()
+    require('telescope.builtin').find_files({ cwd = '..' })
+    end, { desc = 'Find files parent dir' })
+    vim.keymap.set('n', '<leader>fg', function()
+    require('telescope.builtin').current_buffer_fuzzy_find()
+    end, { desc = 'Live grep current file' })
+    vim.keymap.set('n', '<leader>fG', builtin.live_grep, { desc = 'Live grep' })
     vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
     vim.keymap.set('n', '<leader>fh', builtin.lsp_document_symbols, { desc = 'Find symbols' })
   end,
@@ -306,11 +319,11 @@ require("lazy").setup({
   "windwp/nvim-autopairs",
   config = function()
     require("nvim-autopairs").setup({
-        disable_filetype = {
-            "TelescopePrompt", "markdown"
-            },
+        fast_wrap = { map = "<C-l>", },
+        enable_check_bracket_line = true,
+        disable_filetype = { "TelescopePrompt", "markdown" },
         })
-    vim.keymap.set('n', '<C-P>', function()
+    vim.keymap.set('n', '<C-p>', function()
       require("nvim-autopairs").toggle()
     end)
   end,
@@ -347,6 +360,7 @@ require("lazy").setup({
   config = function()
     local lspconfig = require('lspconfig')
     local capabilities = require('blink.cmp').get_lsp_capabilities()
+    vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename)
 
     -- PyLSP
     lspconfig.pylsp.setup({
@@ -461,13 +475,8 @@ require("lazy").setup({
     },
     {
       "<leader>h",
-      "<cmd>Trouble symbols toggle focus=true<cr>",
+      "<cmd>Trouble symbols toggle focus=false<cr>",
       desc = "Symbols (Trouble)",
-    },
-    {
-      "<leader>xq",
-      "<cmd>Trouble qflist toggle<cr>",
-      desc = "Quickfix List (Trouble)",
     },
   },
 },
@@ -497,20 +506,13 @@ require("lazy").setup({
       },
     },
     completion = {
-    documentation = {
-      auto_show = true,
-      auto_show_delay_ms = 1500,
-        },
+    documentation = { auto_show = false },
     trigger = {
       show_on_trigger_character = true,
       show_on_insert_on_trigger_character = true,
         },
-    menu = {
-        auto_show = true,
-        },
-    list = {
-        max_items = 10,
-        },
+    menu = { auto_show = true },
+    list = { max_items = 10 },
     },
     sources = {
       default = { 'lsp', 'snippets', 'path', 'buffer' },
@@ -520,10 +522,8 @@ require("lazy").setup({
   opts_extend = { "sources.default" }
 },
 
-    -- Colour schemes
-{ "loctvl842/monokai-pro.nvim" },
+    -- The only colourscheme.
 { "sainnhe/gruvbox-material" },
-{ "sainnhe/sonokai" },
 
 -- Plugin setup end
 })

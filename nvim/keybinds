@@ -1,0 +1,73 @@
+-- Keybind cheat sheet --
+Telescope:
+<leader>ff = search for files in current dir
+<leader>fF = search for files including parent dir
+<leader>fg = live grep current file
+<leader>fG = live grep across all files
+<leader>fz = zoxide mode (long range dir jumps)
+<leader>fb = find buffers
+<leader>fh = find symbols
+<Tab> = select option
+
+Obsidian:
+<leader>nn = new zettel note
+<leader>ne = new ephemeral note
+<leader>na = add template
+<leader>nb = show backlinks
+<leader>ns = show tags
+<leader>nf = search notes
+<leader>nt = open persistent todo note
+<Tab> = click links
+
+ToggleTerm:
+<leader>t = open
+<Esc> = close
+
+Scribble:
+<leader>s = toggle
+q = close
+
+Oil:
+<leader>o = toggle
+<Tab> = select option
+
+Undotree:
+<leader>u = toggle
+shift + j = down
+shift + k = up
+
+Markdown Preview:
+<leader>ww = start
+<leader>ws = stop
+
+Autopairs:
+<C-p> = toggle activity
+<C-l> = fast wrap
+
+Surround:
+ysiw = surround in word
+ys + motion = surround motion
+ds + symbol = delete that symbol surrounding word
+cs + symbol = change that symbol surrounding word
+
+Trouble:
+<leader-m> = open trouble window + enable virtual lines diagnostics
+<leader-h> = open documents symbols window
+
+LSPs:
+<leader-d> = toggle all diagnostics
+shift + k = show docs for item under cursor
+gd = goto definition
+<leader>rr = rename variable
+
+Blink:
+<Tab> = accept option
+<C-p> = previous option
+<C-n> = next option
+<C-space> = show docs
+
+Universal:
+<leader>c = fast :noh aka cancel highlights
+<leader>y = yank to system clipboard
+<leader>p = paste from system clipboard
+<C-e> = jump to EOL from insert mode

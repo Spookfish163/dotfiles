@@ -118,11 +118,11 @@ require("lazy").setup({
   "windwp/nvim-autopairs",
   config = function()
     require("nvim-autopairs").setup({
-        disable_filetype = {
-            "TelescopePrompt", "markdown"
-            },
+        fast_wrap = { map = "<C-l>", },
+        enable_check_bracket_line = true,
+        disable_filetype = { "TelescopePrompt", "markdown" },
         })
-    vim.keymap.set('n', '<C-P>', function()
+    vim.keymap.set('n', '<C-p>', function()
       require("nvim-autopairs").toggle()
     end)
   end,
@@ -273,13 +273,8 @@ require("lazy").setup({
     },
     {
       "<leader>h",
-      "<cmd>Trouble symbols toggle focus=true<cr>",
+      "<cmd>Trouble symbols toggle focus=false<cr>",
       desc = "Symbols (Trouble)",
-    },
-    {
-      "<leader>xq",
-      "<cmd>Trouble qflist toggle<cr>",
-      desc = "Quickfix List (Trouble)",
     },
   },
 },
@@ -308,10 +303,7 @@ require("lazy").setup({
       },
     },
     completion = {
-    documentation = {
-      auto_show = true,
-      auto_show_delay_ms = 1500,
-        },
+    documentation = { auto_show = true },
     trigger = {
       show_on_trigger_character = true,
       show_on_insert_on_trigger_character = true,
@@ -331,10 +323,8 @@ require("lazy").setup({
   opts_extend = { "sources.default" }
 },
 
-    -- Colour schemes
-{ "loctvl842/monokai-pro.nvim" },
+    -- Colour scheme
 { "sainnhe/gruvbox-material" },
-{ "sainnhe/sonokai" },
 
 -- Plugin setup end
 })
@@ -360,11 +350,7 @@ vim.keymap.set('n', '<leader>d', function()
   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { silent = true, noremap = true })
 
--- Set Gruvbox Material foreground palette: "material", "mix", or "original"
-vim.g.gruvbox_material_foreground = "material"
-
--- Set background contrast: "hard", "medium", or "soft"
-vim.g.gruvbox_material_background = "soft"
-
 -- Set colourscheme
+vim.g.gruvbox_material_foreground = "material"
+vim.g.gruvbox_material_background = "soft"
 vim.cmd.colorscheme("gruvbox-material")
