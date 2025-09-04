@@ -33,35 +33,40 @@ Oil:
 
 Undotree:
 <leader>u = toggle
-shift + j = down
-shift + k = up
+shift + j = older
+shift + k = newer
 
 Markdown Preview:
 <leader>ww = start
 <leader>ws = stop
 
 Autopairs:
-<C-p> = toggle activity
+<C-p> = toggle plugin
 <C-l> = fast wrap
 
 Surround:
 ysiw = surround in word
 ys + motion = surround motion
-ds + symbol = delete that symbol surrounding word
-cs + symbol = change that symbol surrounding word
+ds + symbol = delete symbols surrounding word
+cs + symbol = change symbols surrounding word
 
 Trouble:
 <leader-m> = open trouble window + enable virtual lines diagnostics
 <leader-h> = open documents symbols window
 
 LSPs:
+<leader>ld = Go to definition
+<leader>lu = Go to references
+<leader>li = Go to implementation
+<leader>lt = Go to type definition
+<leader>la = Code actions
+<leader>lf = Format buffer
+<leader>lr = Rename variable
+shift + k = Show docs for item
 <leader-d> = toggle all diagnostics
-shift + k = show docs for item under cursor
-gd = goto definition
-<leader>rr = rename variable
 
 Blink:
-<Tab> = accept option
+<C-y> = accept option
 <C-p> = previous option
 <C-n> = next option
 <C-space> = show docs

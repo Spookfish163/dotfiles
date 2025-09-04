@@ -72,8 +72,8 @@ require("lazy").setup({
     'akinsho/toggleterm.nvim',
     version = "2.*",
     opts = { size = 15 },
-    vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
-    vim.keymap.set('t', '<Esc>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+    vim.keymap.set('n', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+    vim.keymap.set('t', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
 },
 
     -- Oil file manager
@@ -159,6 +159,12 @@ require("lazy").setup({
   config = function()
     local lspconfig = require('lspconfig')
     local capabilities = require('blink.cmp').get_lsp_capabilities()
+    vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, { desc = "Go to definition" })
+    vim.keymap.set("n", "<leader>lu", vim.lsp.buf.references, { desc = "Go to references" })
+    vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+    vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
+    vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format buffer" })
+    vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
 
     -- PyLSP
     lspconfig.pylsp.setup({
@@ -303,7 +309,7 @@ require("lazy").setup({
       },
     },
     completion = {
-    documentation = { auto_show = true },
+    documentation = { auto_show = false },
     trigger = {
       show_on_trigger_character = true,
       show_on_insert_on_trigger_character = true,

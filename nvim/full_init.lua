@@ -38,8 +38,8 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- Enhanced scrolling
-vim.keymap.set('n', '<C-Y>', '<C-Y><C-Y>')
-vim.keymap.set('n', '<C-E>', '<C-E><C-E>')
+vim.keymap.set('n', '<C-y>', '<C-y><C-y>')
+vim.keymap.set('n', '<C-e>', '<C-e><C-e>')
 
 -- Disable backticks (only relevant to my push to talk key)
 vim.keymap.set('n', '`', '<NOP>')
@@ -187,8 +187,8 @@ require("lazy").setup({
     'akinsho/toggleterm.nvim',
     version = "2.*",
     opts = { size = 15 },
-    vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
-    vim.keymap.set('t', '<Esc>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+    vim.keymap.set('n', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+    vim.keymap.set('t', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
 },
 
     -- Oil file manager
@@ -253,6 +253,7 @@ require("lazy").setup({
             },
             ["<Tab>"] = {
                 action = function(selection)
+                    vim.cmd.cd(selection.path)
                     vim.cmd.edit(selection.path)
                 end
             },
@@ -265,7 +266,7 @@ require("lazy").setup({
     require('telescope').load_extension('zoxide')
 
     -- Telescope zoxide bind
-    vim.keymap.set('n', '<leader>z', require('telescope').extensions.zoxide.list, { desc = 'Zoxide directories' })
+    vim.keymap.set('n', '<leader>fz', require('telescope').extensions.zoxide.list, { desc = 'Zoxide directories' })
     -- Telescope binds
     local builtin = require('telescope.builtin')
     vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
@@ -360,7 +361,12 @@ require("lazy").setup({
   config = function()
     local lspconfig = require('lspconfig')
     local capabilities = require('blink.cmp').get_lsp_capabilities()
-    vim.keymap.set("n", "<leader>rr", vim.lsp.buf.rename)
+    vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, { desc = "Go to definition" })
+    vim.keymap.set("n", "<leader>lu", vim.lsp.buf.references, { desc = "Go to references" })
+    vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+    vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
+    vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format buffer" })
+    vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
 
     -- PyLSP
     lspconfig.pylsp.setup({
