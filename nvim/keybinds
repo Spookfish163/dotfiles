@@ -12,11 +12,14 @@ Telescope:
 Obsidian:
 <leader>nn = new zettel note
 <leader>ne = new ephemeral note
+<leader>ng = new rpg note
+<leader>ni = paste image
 <leader>na = add template
 <leader>nb = show backlinks
 <leader>ns = show tags
 <leader>nf = search notes
 <leader>nt = open persistent todo note
+<leader>nc = open quick switcher
 <Tab> = click links
 
 ToggleTerm:
@@ -30,6 +33,7 @@ q = close
 Oil:
 <leader>o = toggle
 <Tab> = select option
+<-> = go up directory
 
 Undotree:
 <leader>u = toggle
@@ -40,21 +44,17 @@ Markdown Preview:
 <leader>ww = start
 <leader>ws = stop
 
-Autopairs:
-<C-p> = toggle plugin
-<C-l> = fast wrap
-
 Surround:
-ysiw = surround in word
-ys + motion = surround motion
-ds + symbol = delete symbols surrounding word
-cs + symbol = change symbols surrounding word
+saiw = surround in word
+sa + motion = surround motion
+sd + symbol = delete symbols surrounding word
+sr + symbol = replace symbols surrounding word
 
 Trouble:
 <leader-m> = open trouble window + enable virtual lines diagnostics
 <leader-h> = open documents symbols window
 
-LSPs:
+LSP:
 <leader>ld = Go to definition
 <leader>lu = Go to references
 <leader>li = Go to implementation
@@ -62,8 +62,8 @@ LSPs:
 <leader>la = Code actions
 <leader>lf = Format buffer
 <leader>lr = Rename variable
+<leader-lx> = toggle all diagnostics
 shift + k = Show docs for item
-<leader-d> = toggle all diagnostics
 
 Blink:
 <C-y> = accept option
@@ -72,7 +72,9 @@ Blink:
 <C-space> = show docs
 
 Universal:
-<leader>c = fast :noh aka cancel highlights
+<leader>cc = fast :noh aka cancel highlights
+<leader>cs = enable spell checker
+z= = Correct misspelled word under cursor
 <leader>y = yank to system clipboard
 <leader>p = paste from system clipboard
 <C-e> = jump to EOL from insert mode

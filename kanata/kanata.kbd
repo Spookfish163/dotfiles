@@ -28,12 +28,12 @@
 
 (deflayer numbers
   _         _    _    _    _           _    _    _    _    _    _    _
-  _         7    8    9    S-6         _    _    _    _    _    _    _
+  _         7    8    9    S-IntlBackslash  _    _    _    _    _    _    _
   Backslash 4    5    6    0           _    _    _    _    _    _
   _  S-1    1    2    3    S-Backslash _    _    _    _    _
 )
 
 (defalias
-  sym-layer (tap-hold 150 150 v (layer-toggle symbols))
-  num-layer (tap-hold 180 180 m (layer-toggle numbers))
+  sym-layer (tap-hold 160 160 v (layer-toggle symbols))
+  num-layer (tap-hold 200 200 m (layer-toggle numbers))
 )

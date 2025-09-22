@@ -6,30 +6,36 @@ vim.opt.background = 'dark'
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.syntax = 'on'
-vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.signcolumn = 'yes'
-
--- Toggle relative/absolute line numbers based on mode
-vim.api.nvim_create_autocmd({'InsertEnter', 'FocusLost', 'WinLeave'}, {
-  callback = function()
-    vim.opt.relativenumber = false
-  end,
-})
-
-vim.api.nvim_create_autocmd({'InsertLeave', 'FocusGained', 'WinEnter'}, {
-  callback = function()
-    vim.opt.relativenumber = true
-  end,
-})
-
--- Search settings
 vim.opt.incsearch = true
 vim.opt.hlsearch = true
-
--- Tab settings
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
+
+-- Toggle relative/absolute line numbers based on mode
+vim.api.nvim_create_autocmd({ 'InsertEnter', 'FocusLost', 'WinLeave' }, {
+    callback = function()
+        vim.opt.relativenumber = false
+    end,
+})
+vim.api.nvim_create_autocmd({ 'InsertLeave', 'FocusGained', 'WinEnter' }, {
+    callback = function()
+        vim.opt.relativenumber = true
+    end,
+})
+
+-- Different cursor shapes for different modes
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
+
+-- Set conceallevel 1 for Obsidian.nvim
+vim.opt.conceallevel = 1
+
+-- Better line wrapping
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
 
 -- Centered scrolling
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
@@ -37,505 +43,469 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
--- Enhanced scrolling
+-- Faster scrolling
 vim.keymap.set('n', '<C-y>', '<C-y><C-y>')
 vim.keymap.set('n', '<C-e>', '<C-e><C-e>')
 
--- Disable backticks (only relevant to my push to talk key)
+-- Disable backticks
 vim.keymap.set('n', '`', '<NOP>')
 vim.keymap.set('n', '``', '<NOP>')
 vim.keymap.set('n', '```', '<NOP>')
 
--- System clipboard keymaps
-vim.keymap.set({'n', 'v'}, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
-vim.keymap.set('n', '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
-vim.keymap.set({'n', 'v'}, '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
-vim.keymap.set({'n', 'v'}, '<leader>P', '"+P', { desc = 'Paste before from system clipboard' })
-
--- Cursor shapes for different modes
-vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
-
--- Jump to end of line without leaving insert mode
+-- Jump to EOL without leaving insert mode
 vim.keymap.set('i', '<C-e>', '<End>', { desc = 'Jump to end of line' })
 
--- Obsidian mappings
-vim.keymap.set("n", "<leader>nn", "<cmd>ObsidianNew Brain/<cr>", { desc = "New brain note" })
-vim.keymap.set("n", "<leader>ne", "<cmd>ObsidianNew Notes/<cr>", { desc = "New ephemeral note" })
-vim.keymap.set("n", "<leader>na", "<cmd>ObsidianTemplate<cr>", { desc = "Add template" })
-vim.keymap.set("n", "<leader>nb", "<cmd>ObsidianBacklinks<cr>", { desc = "Show backlinks" })
-vim.keymap.set("n", "<leader>ns", "<cmd>ObsidianTags<cr>", { desc = "Browse tags" })
-vim.keymap.set("n", "<leader>nf", "<cmd>ObsidianSearch<cr>", { desc = "Search notes" })
-vim.keymap.set("n", "<leader>nc", "<cmd>ObsidianQuickSwitch<cr>", { desc = "Quick switch notes" })
+-- Fast highlight clear
+vim.keymap.set('n', '<leader>cc', '<cmd>nohlsearch<CR>')
+
+-- Turn on spellchecker
+vim.keymap.set('n', '<leader>cs', '<cmd>setlocal spell spelllang=en_gb<cr>', { desc = 'Turn on spell checker' })
+
+-- System clipboard keymaps
+vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { desc = 'Yank to system clipboard' })
+vim.keymap.set('n', '<leader>Y', '"+Y', { desc = 'Yank line to system clipboard' })
+vim.keymap.set({ 'n', 'v' }, '<leader>p', '"+p', { desc = 'Paste from system clipboard' })
+vim.keymap.set({ 'n', 'v' }, '<leader>P', '"+P', { desc = 'Paste before from system clipboard' })
+
+-- Pomodoro mappings
+vim.keymap.set("n", "<leader>ts", "<cmd>PomoStart<cr>", { desc = "Pomo: Start Pomodoro" })
+vim.keymap.set("n", "<leader>tp", "<cmd>PomoPause<cr>", { desc = "Pomo: Pause/Resume" })
+vim.keymap.set("n", "<leader>td", "<cmd>Pomo<cr>", { desc = "Pomo: Show Dashboard" })
+
+-- LSP keybinds
+vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "<leader>lu", vim.lsp.buf.references, { desc = "Go to references" })
+vim.keymap.set("n", "<leader>li", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
+vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format buffer" })
+vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
+
+-- Obsidian keybinds
+vim.keymap.set("n", "<leader>nn", "<cmd>Obsidian new Brain/<cr>", { desc = "New brain note" })
+vim.keymap.set("n", "<leader>ne", "<cmd>Obsidian new Notes/<cr>", { desc = "New ephemeral note" })
+vim.keymap.set("n", "<leader>ng", "<cmd>Obsidian new Hobbies/Delta\\ Green/MERIDIAN/<cr>", { desc = "New TTRPG note" })
+vim.keymap.set("n", "<leader>nr", "<cmd>Obsidian rename<cr>", { desc = "LSP-like rename ability" })
+vim.keymap.set("n", "<leader>nd", "<cmd>Obsidian today<cr>", { desc = "Open daily note" })
+vim.keymap.set("n", "<leader>na", "<cmd>Obsidian template<cr>", { desc = "Add template" })
+vim.keymap.set("n", "<leader>nb", "<cmd>Obsidian backlinks<cr>", { desc = "Show backlinks" })
+vim.keymap.set("n", "<leader>ni", "<cmd>Obsidian paste_img<cr>",
+    { desc = "Paste an img link from clipboard, and create asset note" })
+vim.keymap.set("n", "<leader>ns", "<cmd>Obsidian tags<cr>", { desc = "Browse tags" })
+vim.keymap.set("n", "<leader>nf", "<cmd>Obsidian search<cr>", { desc = "Search notes" })
+vim.keymap.set("n", "<leader>nq", "<cmd>Obsidian quick_switch<cr>", { desc = "Quick switch notes" })
 vim.keymap.set('n', '<leader>nt', function()
-  vim.cmd('edit /var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Todo/Todo.md')
+    vim.cmd('edit /var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Todo/Todo.md')
 end, { desc = 'Open Todo' })
 
 -- Bootstrap lazy.nvim plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable",
+        lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- Plugin setup
 require("lazy").setup({
 
-    -- Obsidian nvim
-{
-  "epwalsh/obsidian.nvim",
-  version = "3.13.1",
-  lazy = false,
-  ft = "markdown",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-  },
-  opts = {
-    workspaces = {
-      {
-        name = "Personal",
-        path = "~/Documents/syncing_folder/Obsidian_Vaults/Personal/",
-        strict = true,
-        overrides = {
-            notes_subdir = "Brain",
+    -- Pomodoro
+    {
+        "4DRIAN0RTIZ/pomo.nvim",
+        config = function()
+            require("pomo").setup({
+                -- Your configuration here
+            })
+        end,
+    },
+
+    -- Lualine
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        opts = {
+            options = {
+                theme = 'gruvbox-material',
+            },
+            sections = {
+                lualine_a = { 'mode' },
+                lualine_x = {
+                    {
+                        function()
+                            return require("pomo").get_lualine_status()
+                        end,
+                        cond = function()
+                            local ok, pomo = pcall(require, "pomo")
+                            return ok and pomo.get_lualine_status() ~= ""
+                        end,
+                    },
+                    'encoding',
+                    'fileformat',
+                    'filetype'
+                },
+            },
         },
-      },
-    },
-      daily_notes = {
-      folder = "Daily Notes",
-      date_format = "%Y-%m-%d",
-      alias_format = "%B %-d, %Y",
-    },
-    completion = {
-      nvim_cmp = false,
-      blink = true,
-      min_chars = 2,
-    },
-    notes_subdir = "Brain",
-    new_notes_location = "notes_subdir",
-
-    -- Simple note ID generation
-    note_id_func = function(title)
-        local suffix = ""
-        if title ~= nil then
-          suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
-        else
-          for _ = 1, 4 do
-            suffix = suffix .. string.char(math.random(65, 90))
-          end
-        end
-        return tostring(os.time()) .. "-" .. suffix
-      end,
-
-    templates = {
-      folder = "Utils/Templates",
-      date_format = "%Y-%m-%d",
-      time_format = "%H:%M",
     },
 
-    ui = { enable = false },
-    picker = { name = "telescope.nvim" },
-    sort_by = "modified",
-    sort_reversed = true,
-    search_max_lines = 1000,
-    open_notes_in = "current",
-
-    -- Callback to set up keymaps when entering a note
-    callbacks = {
-      enter_note = function(_, note)
-        -- Remove default Enter mapping and add Tab for smart_action
-        vim.keymap.del("n", "<CR>", { buffer = note.bufnr })
-        vim.keymap.set("n", "<Tab>", function()
-          return require("obsidian").util.smart_action()
-        end, {
-          buffer = note.bufnr,
-          desc = "Obsidian smart action",
-          expr = true,
-        })
-      end,
-    },
-  },
-},
+    -- Import obsidian.nvim setup from its own file
+    { import = "plugins" },
 
     -- Scribble notes
-{
-   'Spookfish163/scribble.nvim',
-   event = "VeryLazy",
-   config = function()
-       local scribble = require("scribble")
-       scribble.setup({
-            pos = "center",
-            extension = ".md",
-            width = 90,
-            height = 42,
-            auto_save = true,
-            path = "/var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Scribbles/",
-            encoding = "underscore",
-       })
-       vim.keymap.set("n", "<leader>s", scribble.toggle, { desc = "Toggle Scribble" })
-   end,
-},
+    {
+        'Spookfish163/scribble.nvim',
+        event = "VeryLazy",
+        config = function()
+            local scribble = require("scribble")
+            scribble.setup({
+                pos = "center",
+                extension = ".md",
+                width = 90,
+                height = 42,
+                auto_save = true,
+                path = "/var/home/phillip/Documents/syncing_folder/Obsidian_Vaults/Personal/Scribbles/",
+                encoding = "underscore",
+            })
+            vim.keymap.set("n", "<leader>s", scribble.toggle, { desc = "Toggle Scribble" })
+        end,
+    },
 
     -- Toggleterm
-{
-    'akinsho/toggleterm.nvim',
-    version = "2.*",
-    opts = { size = 15 },
-    vim.keymap.set('n', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
-    vim.keymap.set('t', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
-},
+    {
+        'akinsho/toggleterm.nvim',
+        version = "2.*",
+        opts = { size = 15 },
+        vim.keymap.set('n', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+        vim.keymap.set('t', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
+    },
 
     -- Oil file manager
-{
-  'stevearc/oil.nvim',
-  opts = {},
-  dependencies = { { "echasnovski/mini.icons", opts = {} } },
-  lazy = false,
-  config = function()
-    require("oil").setup({
-      keymaps = {
-        ["<leader>o"] = "actions.close",
-        ["<Tab>"] = "actions.select",
-      },
-    })
-    vim.keymap.set("n", "<leader>o", "<CMD>Oil<CR>", { desc = "Open oil file manager" })
-  end
-},
-
-    -- Telescope fuzzy finder
-{
-  'nvim-telescope/telescope.nvim',
-  commit = 'b4da76be54691e854d3e0e02c36b0245f945c2c7',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
     {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make'
+        'stevearc/oil.nvim',
+        opts = {},
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        lazy = false,
+        config = function()
+            require("oil").setup({
+                use_default_keymaps = false,
+                keymaps = {
+                    ["<leader>o"] = "actions.close",
+                    ["<Tab>"] = "actions.select",
+                    ["-"] = { "actions.parent", mode = "n" },
+                    ["_"] = { "actions.open_cwd", mode = "n" },
+                },
+                view_options = {
+                    show_hidden = true,
+                },
+            })
+            vim.keymap.set("n", "<leader>o", "<CMD>Oil<CR>", { desc = "Open oil file manager" })
+        end
     },
-    'jvgrootveld/telescope-zoxide'
-  },
-  config = function()
-    require('telescope').setup({
-      defaults = {
-        mappings = {
-          i = {
-            ["<Tab>"] = require('telescope.actions').select_default,
-          },
-          n = {
-            ["<Tab>"] = require('telescope.actions').select_default,
-          },
-        },
-        file_ignore_patterns = {
-            "%.git/", "node_modules/", "__pycache__/", "zArchive/",
-            },
-        -- Make telescope windows vertical
-        layout_strategy = "vertical",
-        layout_config = {
-          width = 0.9,
-          height = 0.9,
-          preview_height = 0.4,
-        },
-      },
-    -- Change default telescope zoxide behaviour to edit instead of cd
-    extensions = {
-        zoxide = {
-          mappings = {
-            default = {
-              action = function(selection)
-                vim.cmd.edit(selection.path)
-              end
-            },
-            ["<Tab>"] = {
-                action = function(selection)
-                    vim.cmd.cd(selection.path)
-                    vim.cmd.edit(selection.path)
-                end
-            },
-          }
-        }
-      }
-    })
 
-    require('telescope').load_extension('fzf')
-    require('telescope').load_extension('zoxide')
-
-    -- Telescope zoxide bind
-    vim.keymap.set('n', '<leader>fz', require('telescope').extensions.zoxide.list, { desc = 'Zoxide directories' })
-    -- Telescope binds
-    local builtin = require('telescope.builtin')
-    vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
-    vim.keymap.set('n', '<leader>fF', function()
-    require('telescope.builtin').find_files({ cwd = '..' })
-    end, { desc = 'Find files parent dir' })
-    vim.keymap.set('n', '<leader>fg', function()
-    require('telescope.builtin').current_buffer_fuzzy_find()
-    end, { desc = 'Live grep current file' })
-    vim.keymap.set('n', '<leader>fG', builtin.live_grep, { desc = 'Live grep' })
-    vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
-    vim.keymap.set('n', '<leader>fh', builtin.lsp_document_symbols, { desc = 'Find symbols' })
-  end,
-},
+    -- fzf lua
+    {
+        'ibhagwan/fzf-lua',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            require('fzf-lua').setup({
+                winopts = {
+                    height = 0.9,
+                    width = 0.9,
+                    preview = {
+                        vertical = 'up:50%',
+                    },
+                },
+                keymap = {
+                    fzf = {
+                        ["tab"] = "accept",
+                    },
+                },
+                files = {
+                    file_ignore_patterns = {
+                        "%.git/", "node_modules/", "__pycache__/", "Personal/Utils/",
+                    },
+                },
+            })
+            -- Keybinds
+            vim.keymap.set('n', '<leader>ff', require('fzf-lua').files, { desc = 'Find files' })
+            vim.keymap.set('n', '<leader>fF', function()
+                require('fzf-lua').files({ cwd = '..' })
+            end, { desc = 'Find files parent dir' })
+            vim.keymap.set('n', '<leader>fg', require('fzf-lua').blines, { desc = 'Live grep current file' })
+            vim.keymap.set('n', '<leader>fG', require('fzf-lua').live_grep, { desc = 'Live grep' })
+            vim.keymap.set('n', '<leader>fb', require('fzf-lua').buffers, { desc = 'Find buffers' })
+            vim.keymap.set('n', '<leader>fz', require('fzf-lua').zoxide, { desc = 'Zoxide directories' })
+        end,
+    },
 
     -- Undotree
-{
-  'mbbill/undotree',
-  config = function()
-    vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
-    vim.g.undotree_SetFocusWhenToggle = 1
-    vim.g.undotree_DiffpanelHeight = 0
-  end
-},
+    {
+        'mbbill/undotree',
+        config = function()
+            vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+            vim.g.undotree_SetFocusWhenToggle = 1
+            vim.g.undotree_DiffpanelHeight = 0
+        end
+    },
 
     -- Markdown preview
-{
-  "iamcco/markdown-preview.nvim",
-  cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-  build = "cd app && yarn install",
-  init = function()
-    vim.g.mkdp_filetypes = { "markdown" }
-  vim.keymap.set('n', '<leader>ww', '<cmd>MarkdownPreview<cr>')
-  vim.keymap.set('n', '<leader>ws', '<cmd>MarkdownPreviewStop<cr>')
-  end,
-  ft = { "markdown" },
-},
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        build = "cd app && yarn install",
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+            vim.keymap.set('n', '<leader>ww', '<cmd>MarkdownPreview<cr>')
+            vim.keymap.set('n', '<leader>ws', '<cmd>MarkdownPreviewStop<cr>')
+        end,
+        ft = { "markdown" },
+    },
 
-    -- Nvim surround
-{
-    "kylechui/nvim-surround",
-    version = "^3.0.0",
-    event = "VeryLazy",
-    config = function()
-        require("nvim-surround").setup({})
-    end
-},
+    -- Mini pairs
+    {
+        "nvim-mini/mini.pairs",
+        version = false,
+        config = function()
+            vim.keymap.set('i', '<BS>', '<BS>', { desc = 'Normal backspace' })
+            require('mini.pairs').setup()
+        end,
+    },
+    -- Mini surround
+    {
+        'nvim-mini/mini.surround',
+        version = false,
+        config = true,
+    },
 
-    -- Auto Pairs
-{
-  "windwp/nvim-autopairs",
-  config = function()
-    require("nvim-autopairs").setup({
-        fast_wrap = { map = "<C-l>", },
-        enable_check_bracket_line = true,
-        disable_filetype = { "TelescopePrompt", "markdown" },
-        })
-    vim.keymap.set('n', '<C-p>', function()
-      require("nvim-autopairs").toggle()
-    end)
-  end,
-},
-
-    -- Vim tmux manager
-{
-  "christoomey/vim-tmux-navigator",
-  lazy = false,
-},
+    -- Vim tmux navigator
+    {
+        "christoomey/vim-tmux-navigator",
+        lazy = false,
+    },
 
     -- Syntax highlighting
-{
-  "nvim-treesitter/nvim-treesitter",
-  branch = 'master',
-  lazy = false,
-  build = ":TSUpdate",
-  config = function()
-    require("nvim-treesitter.configs").setup({
-      ensure_installed = { "python", "rust", "c", "bash", "lua", "query", "markdown", "markdown_inline" },
-      sync_install = false,
-      auto_install = true,
-      ignore_install = {},
-      modules = {},
-      highlight = { enable = true },
-      indent = { enable = true },
-    })
-  end,
-},
+    {
+        "nvim-treesitter/nvim-treesitter",
+        lazy = false,
+        branch = 'main',
+        build = ":TSUpdate",
+        config = function()
+            require 'nvim-treesitter'.setup {
+                install_dir = vim.fn.stdpath('data') .. '/site'
+            }
+            require 'nvim-treesitter'.install { "python", "rust", "c", "bash", "lua", "query", "markdown", "markdown_inline" }
 
-    -- LSP Configuration
-{
-  "neovim/nvim-lspconfig",
-  config = function()
-    local lspconfig = require('lspconfig')
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
-    vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, { desc = "Go to definition" })
-    vim.keymap.set("n", "<leader>lu", vim.lsp.buf.references, { desc = "Go to references" })
-    vim.keymap.set("n", "<leader>lt", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
-    vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code actions" })
-    vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format buffer" })
-    vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
-
-    -- PyLSP
-    lspconfig.pylsp.setup({
-      capabilities = capabilities,
-      settings = {
-        pylsp = {
-          plugins = {
-            pycodestyle = { enabled = false },  -- Disabled since using ruff
-            mccabe = { enabled = false },       -- Disabled since using ruff
-            pyflakes = { enabled = false },     -- Disabled since using ruff
-            flake8 = { enabled = false },       -- Disabled since using ruff
-            pylsp_mypy = { enabled = true },    -- Type checking
-          }
-        }
-      }
-    })
-    -- Ruff server (Actually good Python linting)
-    lspconfig.ruff.setup({
-      capabilities = capabilities,
-      init_options = {
-        settings = {
-          args = {},
-        }
-      }
-    })
-
-    -- Rust analyzer
-    lspconfig.rust_analyzer.setup({
-      capabilities = capabilities,
-      settings = {
-        ['rust-analyzer'] = {
-          cargo = {
-            allFeatures = true,
-          },
-            checkOnSave = true,
-        },
-      },
-    })
-
-    -- Lua LS
-    lspconfig.lua_ls.setup({
-      settings = {
-        Lua = {
-          runtime = {
-            version = 'LuaJIT',
-          },
-          diagnostics = {
-            globals = {'vim'},
-          },
-          workspace = {
-            library = vim.api.nvim_get_runtime_file("", true),
-            checkThirdParty = false,
-          },
-          telemetry = {
-            enable = false,
-          },
-        },
-      },
-    })
-
-    -- C/C++ (clangd)
-    lspconfig.clangd.setup({
-      capabilities = capabilities,
-      cmd = {
-        "clangd",
-        "--background-index",
-        "--clang-tidy",
-        "--header-insertion=iwyu",
-        "--completion-style=detailed",
-      },
-    })
-
-    -- Bash language server
-    lspconfig.bashls.setup({
-      capabilities = capabilities,
-    })
-  end,
-},
+            vim.api.nvim_create_autocmd('FileType', {
+                pattern = { 'python', 'rust', 'c', 'cpp', 'bash', 'sh', 'lua', 'markdown' },
+                callback = function()
+                    vim.treesitter.start()
+                    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                end,
+            })
+        end,
+    },
 
     -- "Trouble" diagnostic viewing
-{
-  "folke/trouble.nvim",
-  opts = {
-    warn_no_results = false,
-    open_no_results = true,
-    win = {
-      size = 10,
-    },
-    modes = {
-      symbols = {
-        win = { size = 40 },
-      },
-    },
-    keys = {
-      ["<tab>"] = "jump",
-    },
-  },
-  cmd = "Trouble",
-  keys = {
-        -- Toggle virtual lines with trouble window
     {
-      "<leader>m",
-        function()
-        local trouble = require("trouble")
-        local is_open = trouble.is_open("diagnostics")
-        vim.diagnostic.config({
-          virtual_lines = not is_open,
-        })
-        trouble.toggle("diagnostics")
-      end,
-      desc = "Diagnostics (Trouble)",
+        "folke/trouble.nvim",
+        opts = {
+            warn_no_results = false,
+            open_no_results = true,
+            win = {
+                size = 10,
+            },
+            modes = {
+                symbols = {
+                    win = { size = 40 },
+                },
+            },
+            keys = {
+                ["<tab>"] = "jump",
+            },
+        },
+        cmd = "Trouble",
+        keys = {
+            -- Toggle virtual lines with trouble window
+            {
+                "<leader>m",
+                function()
+                    local trouble = require("trouble")
+                    local is_open = trouble.is_open("diagnostics")
+                    vim.diagnostic.config({
+                        virtual_lines = not is_open,
+                    })
+                    trouble.toggle("diagnostics")
+                end,
+                desc = "Diagnostics (Trouble)",
+            },
+            {
+                "<leader>h",
+                "<cmd>Trouble symbols toggle focus=false<cr>",
+                desc = "Symbols (Trouble)",
+            },
+        },
     },
+
+    -- Snippets
+    { "rafamadriz/friendly-snippets" },
     {
-      "<leader>h",
-      "<cmd>Trouble symbols toggle focus=false<cr>",
-      desc = "Symbols (Trouble)",
+        "L3MON4D3/LuaSnip",
+        dependencies = { "rafamadriz/friendly-snippets" },
+        version = "v2.*",
+        build = "make install_jsregexp",
+        config = function()
+            require("luasnip.loaders.from_vscode").lazy_load()
+            require("luasnip.loaders.from_vscode").lazy_load({
+                paths = { "~/.config/nvim/snippets/" }
+            })
+        end,
     },
-  },
-},
 
     -- Autocomplete
-{
-  'saghen/blink.cmp',
-  dependencies = { 'rafamadriz/friendly-snippets' },
-  version = '1.*',
-  opts = {
-    keymap = { preset = 'default' },
-    appearance = {
-      nerd_font_variant = 'mono'
-    },
-    signature = {
-      enabled = true,
-      trigger = {
-            -- had annoying lingering signature helper on these
-        blocked_trigger_characters = {"<>"},
-        blocked_retrigger_characters = {},
-        show_on_insert_on_trigger_character = true,
-      },
-      window = {
-        winblend = 0,
-        winhighlight = "Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder",
-        direction_priority = { "n" },
-      },
-    },
-    completion = {
-    documentation = { auto_show = false },
-    trigger = {
-      show_on_trigger_character = true,
-      show_on_insert_on_trigger_character = true,
+    {
+        'saghen/blink.cmp',
+        dependencies = {
+            'L3MON4D3/LuaSnip',
+            version = 'v2.*',
         },
-    menu = { auto_show = true },
-    list = { max_items = 10 },
+        version = '1.*',
+        opts = {
+            snippets = { preset = 'luasnip' },
+            keymap = { preset = 'default' },
+            appearance = {
+                nerd_font_variant = 'mono'
+            },
+            signature = {
+                enabled = true,
+                trigger = {
+                    blocked_trigger_characters = {},
+                    blocked_retrigger_characters = {},
+                    show_on_insert_on_trigger_character = true,
+                },
+                window = {
+                    winblend = 0,
+                    winhighlight = "Normal:BlinkCmpSignatureHelp,FloatBorder:BlinkCmpSignatureHelpBorder",
+                    direction_priority = { "n" },
+                },
+            },
+            completion = {
+                documentation = { auto_show = false },
+                trigger = {
+                    show_on_trigger_character = true,
+                    show_on_insert_on_trigger_character = true,
+                },
+                menu = { auto_show = true },
+                list = { max_items = 8 },
+            },
+            sources = {
+                default = { 'lsp', 'path', 'snippets', 'buffer', },
+                per_filetype = {
+                    markdown = { 'lsp', 'path', 'snippets', 'buffer', },
+                },
+            },
+            fuzzy = { implementation = "prefer_rust_with_warning" },
+        },
+        opts_extend = { "sources.default" }
     },
-    sources = {
-      default = { 'lsp', 'snippets', 'path', 'buffer' },
-    },
-    fuzzy = { implementation = "prefer_rust_with_warning" },
-  },
-  opts_extend = { "sources.default" }
-},
 
-    -- The only colourscheme.
-{ "sainnhe/gruvbox-material" },
+    { "sainnhe/gruvbox-material" },
 
--- Plugin setup end
+    -- Still call nvim-lspconfig for options
+    { "neovim/nvim-lspconfig" },
+
+    -- Plugin setup end
 })
 
--- Fast highlight clear
-vim.keymap.set('n', '<leader>c', '<cmd>nohlsearch<CR>')
+-- LSP setup
+-- luals
+vim.lsp.config.luals = {
+    cmd = { 'lua-language-server' },
+    filetypes = { 'lua' },
+    root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
+    settings = {
+        Lua = {
+            runtime = {
+                version = 'LuaJIT',
+            }
+        }
+    }
+}
+vim.lsp.enable('luals')
+
+-- PyLSP
+vim.lsp.config.pylsp = {
+    cmd = { 'pylsp' },
+    filetypes = { 'python' },
+    root_markers = { { 'pyproject.toml', 'poetry.lock' }, '.git' },
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
+    settings = {
+        pylsp = {
+            plugins = {
+                pycodestyle = { enabled = false }, -- Disabled since using ruff
+                mccabe = { enabled = false },      -- Disabled since using ruff
+                pyflakes = { enabled = false },    -- Disabled since using ruff
+                flake8 = { enabled = false },      -- Disabled since using ruff
+                pylsp_mypy = { enabled = true },   -- Type checking
+            }
+        }
+    }
+}
+vim.lsp.enable('pylsp')
+
+-- Ruff
+vim.lsp.config.ruff = {
+    cmd = { 'ruff', 'server' },
+    filetypes = { 'python' },
+    root_markers = { { 'pyproject.toml', 'poetry.lock' }, '.git' },
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
+    init_options = {
+        settings = {
+            args = {},
+        }
+    }
+}
+vim.lsp.enable('ruff')
+
+-- clangd
+vim.lsp.config.clangd = {
+    cmd = { 'clangd', '--background-index' },
+    root_markers = { 'compile_commands.json', 'compile_flags.txt' },
+    filetypes = { 'c', 'cpp' },
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
+}
+vim.lsp.enable({ 'clangd' })
+
+-- Rust analyzer
+vim.lsp.config.rust_analyzer = {
+    cmd = { 'rust-analyzer' },
+    filetypes = { 'rust' },
+    root_markers = { 'Cargo.toml', 'Cargo.lock', 'rust-project.json' },
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
+    settings = {
+        ['rust-analyzer'] = {
+            cargo = {
+                allFeatures = true,
+            },
+            checkOnSave = true,
+        },
+    }
+}
+vim.lsp.enable({ 'rust_analyzer' })
+
+-- Bash language server
+vim.lsp.config.bashls = {
+    cmd = { 'bash-language-server', 'start' },
+    filetypes = { 'sh', 'bash' },
+    root_markers = { '.git' },
+    capabilities = require('blink.cmp').get_lsp_capabilities(),
+}
+vim.lsp.enable({ 'bashls' })
 
 -- Persistent undo history
 vim.opt.undofile = true
@@ -543,17 +513,17 @@ vim.opt.undodir = vim.fn.stdpath('data') .. '/undo'
 
 -- Limit diagnostic noise
 vim.diagnostic.config({
-  virtual_text = false,       -- Disable virtual text
-  virtual_lines = false,      -- Disable virtual lines
-  underline = false,          -- Disable underlines
-  signs = true,               -- Keep gutter signs (W, H, E)
-  update_in_insert = false,   -- Don't update diagnostics in insert mode
-  severity_sort = true,       -- Sort by severity
+    virtual_text = false,
+    virtual_lines = false,
+    underline = false,
+    signs = true,
+    update_in_insert = false,
+    severity_sort = true,
 })
 
 -- Debug toggle
-vim.keymap.set('n', '<leader>d', function()
-  vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+vim.keymap.set('n', '<leader>lx', function()
+    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 end, { silent = true, noremap = true })
 
 -- Set Gruvbox Material foreground palette: "material", "mix", or "original"
