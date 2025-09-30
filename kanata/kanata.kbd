@@ -20,20 +20,20 @@
 )
 
 (deflayer symbols
-  _    _    _    _    _    _    _    _     _   _   _    _ 
-  _    _    _    _    _    _    [    S-[   ]   S-] _    _    
-  _    _    _    _    _    S-7  min  S-min =   +   _ 
-  _    _    _    _    _    _    S-8  S-2   S-9 S-0 S-.
+  _    _    _    _    _    S-6  S-7  S-8   S-9 S-0 _    _ 
+  _    _    _    _    _    S-6  [    S-[   ]   S-] _    _    
+  _    _    _    _    _    S-4  min  S-min =   +   _
+  _    _    _    _    _    _    S-7  S-2   S-, S-. S-8
 )
 
 (deflayer numbers
-  _         _    _    _    _           _    _    _    _    _    _    _
-  _         7    8    9    S-IntlBackslash  _    _    _    _    _    _    _
-  Backslash 4    5    6    0           _    _    _    _    _    _
-  _  S-1    1    2    3    S-Backslash _    _    _    _    _
+  S-1           S-2  S-3  S-4  S-5             S-6  _    _    _    _    _    _
+  S-5           7    8    9    S-IntlBackslash _    _    _    _    _    _    _
+  0             4    5    6    Backslash       _    _    _    _    _    _
+  _ S-Backslash 1    2    3    S-1             _    _    _    _    _
 )
 
 (defalias
-  sym-layer (tap-hold 160 160 v (layer-toggle symbols))
+  sym-layer (tap-hold 150 150 v (layer-toggle symbols))
   num-layer (tap-hold 200 200 m (layer-toggle numbers))
 )
