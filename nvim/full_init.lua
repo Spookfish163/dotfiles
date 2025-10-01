@@ -85,6 +85,7 @@ vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename)
 vim.keymap.set("n", "<leader>nn", "<cmd>Obsidian new Brain/<cr>", { desc = "New brain note" })
 vim.keymap.set("n", "<leader>ne", "<cmd>Obsidian new Notes/<cr>", { desc = "New ephemeral note" })
 vim.keymap.set("n", "<leader>ng", "<cmd>Obsidian new Hobbies/Delta\\ Green/MERIDIAN/<cr>", { desc = "New TTRPG note" })
+vim.keymap.set("n", "<leader>np", "<cmd>Obsidian new Hobbies/Piano/<cr>", { desc = "New piano note" })
 vim.keymap.set("n", "<leader>nr", "<cmd>Obsidian rename<cr>", { desc = "LSP-like rename ability" })
 vim.keymap.set("n", "<leader>nd", "<cmd>Obsidian today<cr>", { desc = "Open daily note" })
 vim.keymap.set("n", "<leader>na", "<cmd>Obsidian template<cr>", { desc = "Add template" })
@@ -115,13 +116,36 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugin setup
 require("lazy").setup({
 
+    -- Gitsigns
+    {
+        'lewis6991/gitsigns.nvim',
+        event = 'VeryLazy',
+        opts = {
+            on_attach = function(bufnr)
+                local gs = package.loaded.gitsigns
+
+                vim.keymap.set('n', ']c', function()
+                    if vim.wo.diff then return ']c' end
+                    vim.schedule(function() gs.next_hunk() end)
+                    return '<Ignore>'
+                end, { expr = true, buffer = bufnr })
+
+                vim.keymap.set('n', '[c', function()
+                    if vim.wo.diff then return '[c' end
+                    vim.schedule(function() gs.prev_hunk() end)
+                    return '<Ignore>'
+                end, { expr = true, buffer = bufnr })
+
+                vim.keymap.set('n', '<leader>gt', gs.toggle_current_line_blame, { buffer = bufnr })
+            end
+        }
+    },
+
     -- Pomodoro
     {
         "4DRIAN0RTIZ/pomo.nvim",
         config = function()
-            require("pomo").setup({
-                -- Your configuration here
-            })
+            require("pomo").setup({})
         end,
     },
 
@@ -245,12 +269,23 @@ require("lazy").setup({
 
     -- Undotree
     {
-        'mbbill/undotree',
+        "jiaoshijie/undotree",
         config = function()
-            vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
-            vim.g.undotree_SetFocusWhenToggle = 1
-            vim.g.undotree_DiffpanelHeight = 0
-        end
+            require('undotree').setup({
+                float_diff = true,
+                position = "bottom",
+                keymaps = {
+                    ['<Tab>'] = "enter",
+                },
+                window = {
+                    winblend = 0,
+                    border = "solid",
+                },
+            })
+        end,
+        keys = {
+            { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+        },
     },
 
     -- Markdown preview
@@ -305,6 +340,10 @@ require("lazy").setup({
                 callback = function()
                     vim.treesitter.start()
                     vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    -- fix for end_col errors
+                    if vim.bo.filetype == "markdown" then
+                        vim.g._ts_force_sync_parsing = true
+                    end
                 end,
             })
         end,
@@ -325,7 +364,7 @@ require("lazy").setup({
                 },
             },
             keys = {
-                ["<tab>"] = "jump",
+                ["<Tab>"] = "jump",
             },
         },
         cmd = "Trouble",
@@ -447,11 +486,11 @@ vim.lsp.config.pylsp = {
     settings = {
         pylsp = {
             plugins = {
-                pycodestyle = { enabled = false }, -- Disabled since using ruff
-                mccabe = { enabled = false },      -- Disabled since using ruff
-                pyflakes = { enabled = false },    -- Disabled since using ruff
-                flake8 = { enabled = false },      -- Disabled since using ruff
-                pylsp_mypy = { enabled = true },   -- Type checking
+                pycodestyle = { enabled = false },
+                mccabe = { enabled = false },
+                pyflakes = { enabled = false },
+                flake8 = { enabled = false },
+                pylsp_mypy = { enabled = true },
             }
         }
     }
@@ -464,11 +503,6 @@ vim.lsp.config.ruff = {
     filetypes = { 'python' },
     root_markers = { { 'pyproject.toml', 'poetry.lock' }, '.git' },
     capabilities = require('blink.cmp').get_lsp_capabilities(),
-    init_options = {
-        settings = {
-            args = {},
-        }
-    }
 }
 vim.lsp.enable('ruff')
 
@@ -489,6 +523,9 @@ vim.lsp.config.rust_analyzer = {
     capabilities = require('blink.cmp').get_lsp_capabilities(),
     settings = {
         ['rust-analyzer'] = {
+            typing = {
+                continueCommentsOnNewLine = false,
+            },
             cargo = {
                 allFeatures = true,
             },

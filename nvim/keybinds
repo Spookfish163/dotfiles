@@ -1,16 +1,15 @@
 -- Keybind cheat sheet --
-Telescope:
+Fzf Lua:
 <leader>ff = search for files in current dir
 <leader>fF = search for files including parent dir
 <leader>fg = live grep current file
 <leader>fG = live grep across all files
 <leader>fz = zoxide mode (long range dir jumps)
 <leader>fb = find buffers
-<leader>fh = find symbols
 <Tab> = select option
 
 Obsidian:
-<leader>nn = new zettel note
+<leader>nn = new brain note
 <leader>ne = new ephemeral note
 <leader>ng = new rpg note
 <leader>ni = paste image
@@ -20,11 +19,13 @@ Obsidian:
 <leader>nf = search notes
 <leader>nt = open persistent todo note
 <leader>nc = open quick switcher
-<Tab> = click links
+<C-y> = follow link, activate checkbox (can't be tab due to C-i clash)
+[o = jump to previous link
+]o = jump to next link
 
 ToggleTerm:
-<leader>t = open
-<Esc> = close
+<C-t> = open
+<C-t> = close
 
 Scribble:
 <leader>s = toggle
@@ -37,8 +38,8 @@ Oil:
 
 Undotree:
 <leader>u = toggle
-shift + j = older
-shift + k = newer
+<Tab> = jump to selected
+standard vim bind navigation
 
 Markdown Preview:
 <leader>ww = start
@@ -70,6 +71,12 @@ Blink:
 <C-p> = previous option
 <C-n> = next option
 <C-space> = show docs
+
+Gitsigns:
+<leader>gb = show blame for line
+<leader>gt = toggle blame
+]c = next hunk
+[c = previous hunk
 
 Universal:
 <leader>cc = fast :noh aka cancel highlights

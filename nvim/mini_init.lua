@@ -1,4 +1,3 @@
--- Set leader key
 vim.g.mapleader = " "
 
 -- Basic settings
@@ -44,6 +43,11 @@ vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', '<C-y>', '<C-y><C-y>')
 vim.keymap.set('n', '<C-e>', '<C-e><C-e>')
 
+-- Disable backticks
+vim.keymap.set('n', '`', '<NOP>')
+vim.keymap.set('n', '``', '<NOP>')
+vim.keymap.set('n', '```', '<NOP>')
+
 -- Jump to EOL without leaving insert mode
 vim.keymap.set('i', '<C-e>', '<End>', { desc = 'Jump to end of line' })
 
@@ -84,6 +88,42 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Plugin setup
 require("lazy").setup({
+
+    -- Gitsigns
+    {
+        'lewis6991/gitsigns.nvim',
+        event = 'VeryLazy',
+        opts = {
+            on_attach = function(bufnr)
+                local gs = package.loaded.gitsigns
+
+                vim.keymap.set('n', ']c', function()
+                    if vim.wo.diff then return ']c' end
+                    vim.schedule(function() gs.next_hunk() end)
+                    return '<Ignore>'
+                end, { expr = true, buffer = bufnr })
+
+                vim.keymap.set('n', '[c', function()
+                    if vim.wo.diff then return '[c' end
+                    vim.schedule(function() gs.prev_hunk() end)
+                    return '<Ignore>'
+                end, { expr = true, buffer = bufnr })
+
+                vim.keymap.set('n', '<leader>gt', gs.toggle_current_line_blame, { buffer = bufnr })
+            end
+        }
+    },
+
+    -- Lualine
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        opts = {
+            options = {
+                theme = 'gruvbox-material',
+            },
+        },
+    },
 
     -- Toggleterm
     {
@@ -155,12 +195,23 @@ require("lazy").setup({
 
     -- Undotree
     {
-        'mbbill/undotree',
+        "jiaoshijie/undotree",
         config = function()
-            vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
-            vim.g.undotree_SetFocusWhenToggle = 1
-            vim.g.undotree_DiffpanelHeight = 0
-        end
+            require('undotree').setup({
+                float_diff = true,
+                position = "bottom",
+                keymaps = {
+                    ['<Tab>'] = "enter",
+                },
+                window = {
+                    winblend = 0,
+                    border = "solid",
+                },
+            })
+        end,
+        keys = {
+            { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+        },
     },
 
     -- Markdown preview
@@ -215,6 +266,10 @@ require("lazy").setup({
                 callback = function()
                     vim.treesitter.start()
                     vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    -- fix for end_col errors
+                    if vim.bo.filetype == "markdown" then
+                        vim.g._ts_force_sync_parsing = true
+                    end
                 end,
             })
         end,
@@ -235,7 +290,7 @@ require("lazy").setup({
                 },
             },
             keys = {
-                ["<tab>"] = "jump",
+                ["<Tab>"] = "jump",
             },
         },
         cmd = "Trouble",
@@ -357,11 +412,11 @@ vim.lsp.config.pylsp = {
     settings = {
         pylsp = {
             plugins = {
-                pycodestyle = { enabled = false }, -- Disabled since using ruff
-                mccabe = { enabled = false },      -- Disabled since using ruff
-                pyflakes = { enabled = false },    -- Disabled since using ruff
-                flake8 = { enabled = false },      -- Disabled since using ruff
-                pylsp_mypy = { enabled = true },   -- Type checking
+                pycodestyle = { enabled = false },
+                mccabe = { enabled = false },
+                pyflakes = { enabled = false },
+                flake8 = { enabled = false },
+                pylsp_mypy = { enabled = true },
             }
         }
     }
@@ -374,11 +429,6 @@ vim.lsp.config.ruff = {
     filetypes = { 'python' },
     root_markers = { { 'pyproject.toml', 'poetry.lock' }, '.git' },
     capabilities = require('blink.cmp').get_lsp_capabilities(),
-    init_options = {
-        settings = {
-            args = {},
-        }
-    }
 }
 vim.lsp.enable('ruff')
 
@@ -399,6 +449,9 @@ vim.lsp.config.rust_analyzer = {
     capabilities = require('blink.cmp').get_lsp_capabilities(),
     settings = {
         ['rust-analyzer'] = {
+            typing = {
+                continueCommentsOnNewLine = false,
+            },
             cargo = {
                 allFeatures = true,
             },
