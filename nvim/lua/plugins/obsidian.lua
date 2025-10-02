@@ -2,8 +2,9 @@
 return {
     "obsidian-nvim/obsidian.nvim",
     version = "*",
-    lazy = false,
+    lazy = true,
     ft = "markdown",
+    cmd = { "Obsidian" },
     opts = {
         legacy_commands = false,
         workspaces = {
@@ -86,7 +87,7 @@ return {
             order = { " ", ">", "x", },
         },
         ui = {
-            enable = true,
+            enable = false,
         },
         picker = { name = "fzf-lua" },
         sort_by = "modified",

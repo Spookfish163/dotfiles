@@ -144,6 +144,7 @@ require("lazy").setup({
     -- Pomodoro
     {
         "4DRIAN0RTIZ/pomo.nvim",
+        cmd = { "PomoStart", "PomoPause", "Pomo" },
         config = function()
             require("pomo").setup({})
         end,
@@ -152,6 +153,7 @@ require("lazy").setup({
     -- Lualine
     {
         'nvim-lualine/lualine.nvim',
+        event = 'VeryLazy',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         opts = {
             options = {
@@ -162,12 +164,15 @@ require("lazy").setup({
                 lualine_x = {
                     {
                         function()
-                            return require("pomo").get_lualine_status()
+                            if package.loaded["pomo"] then
+                                return require("pomo").get_lualine_status() or ""
+                            end
+                            return ""
                         end,
-                        cond = function()
-                            local ok, pomo = pcall(require, "pomo")
-                            return ok and pomo.get_lualine_status() ~= ""
-                        end,
+                        --cond = function()
+                        --    local ok, pomo = pcall(require, "pomo")
+                        --    return ok and pomo.get_lualine_status() ~= ""
+                        --end,
                     },
                     'encoding',
                     'fileformat',
@@ -203,9 +208,10 @@ require("lazy").setup({
     {
         'akinsho/toggleterm.nvim',
         version = "2.*",
+        keys = {
+            { '<C-t>', '<cmd>ToggleTerm<cr>', mode = { 'n', 't' }, desc = 'Toggle terminal' },
+        },
         opts = { size = 15 },
-        vim.keymap.set('n', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
-        vim.keymap.set('t', '<C-t>', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' }),
     },
 
     -- Oil file manager
@@ -305,6 +311,7 @@ require("lazy").setup({
     {
         "nvim-mini/mini.pairs",
         version = false,
+        event = "InsertEnter",
         config = function()
             vim.keymap.set('i', '<BS>', '<BS>', { desc = 'Normal backspace' })
             require('mini.pairs').setup()
@@ -314,6 +321,15 @@ require("lazy").setup({
     {
         'nvim-mini/mini.surround',
         version = false,
+        keys = {
+            { "sa", mode = { "n", "v" } },
+            { "sd", mode = "n" },
+            { "sr", mode = "n" },
+            { "sf", mode = { "n", "v" } },
+            { "sF", mode = { "n", "v" } },
+            { "sh", mode = { "n", "v" } },
+            { "sn", mode = { "n", "v" } },
+        },
         config = true,
     },
 
@@ -394,6 +410,7 @@ require("lazy").setup({
     { "rafamadriz/friendly-snippets" },
     {
         "L3MON4D3/LuaSnip",
+        lazy = true,
         dependencies = { "rafamadriz/friendly-snippets" },
         version = "v2.*",
         build = "make install_jsregexp",
@@ -408,6 +425,8 @@ require("lazy").setup({
     -- Autocomplete
     {
         'saghen/blink.cmp',
+        lazy = true,
+        event = 'InsertEnter',
         dependencies = {
             'L3MON4D3/LuaSnip',
             version = 'v2.*',
@@ -466,7 +485,6 @@ vim.lsp.config.luals = {
     cmd = { 'lua-language-server' },
     filetypes = { 'lua' },
     root_markers = { { '.luarc.json', '.luarc.jsonc' }, '.git' },
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
     settings = {
         Lua = {
             runtime = {
@@ -482,7 +500,6 @@ vim.lsp.config.pylsp = {
     cmd = { 'pylsp' },
     filetypes = { 'python' },
     root_markers = { { 'pyproject.toml', 'poetry.lock' }, '.git' },
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
     settings = {
         pylsp = {
             plugins = {
@@ -502,7 +519,6 @@ vim.lsp.config.ruff = {
     cmd = { 'ruff', 'server' },
     filetypes = { 'python' },
     root_markers = { { 'pyproject.toml', 'poetry.lock' }, '.git' },
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
 }
 vim.lsp.enable('ruff')
 
@@ -511,7 +527,6 @@ vim.lsp.config.clangd = {
     cmd = { 'clangd', '--background-index' },
     root_markers = { 'compile_commands.json', 'compile_flags.txt' },
     filetypes = { 'c', 'cpp' },
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
 }
 vim.lsp.enable({ 'clangd' })
 
@@ -520,7 +535,6 @@ vim.lsp.config.rust_analyzer = {
     cmd = { 'rust-analyzer' },
     filetypes = { 'rust' },
     root_markers = { 'Cargo.toml', 'Cargo.lock', 'rust-project.json' },
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
     settings = {
         ['rust-analyzer'] = {
             typing = {
@@ -540,7 +554,6 @@ vim.lsp.config.bashls = {
     cmd = { 'bash-language-server', 'start' },
     filetypes = { 'sh', 'bash' },
     root_markers = { '.git' },
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
 }
 vim.lsp.enable({ 'bashls' })
 
