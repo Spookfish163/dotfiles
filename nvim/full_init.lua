@@ -37,6 +37,12 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 
+-- Better navigation through very long lines
+if vim.o.wrap then
+  vim.keymap.set("n", "j", [[v:count ? 'j' : 'gj']], { expr = true })
+  vim.keymap.set("n", "k", [[v:count ? 'k' : 'gk']], { expr = true })
+end
+
 -- Centered scrolling
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')

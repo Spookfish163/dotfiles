@@ -214,19 +214,6 @@ require("lazy").setup({
         },
     },
 
-    -- Markdown preview
-    {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        build = "cd app && yarn install",
-        init = function()
-            vim.g.mkdp_filetypes = { "markdown" }
-            vim.keymap.set('n', '<leader>ww', '<cmd>MarkdownPreview<cr>')
-            vim.keymap.set('n', '<leader>ws', '<cmd>MarkdownPreviewStop<cr>')
-        end,
-        ft = { "markdown" },
-    },
-
     -- Mini pairs
     {
         "nvim-mini/mini.pairs",

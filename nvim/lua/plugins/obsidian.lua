@@ -87,7 +87,22 @@ return {
             order = { " ", ">", "x", },
         },
         ui = {
-            enable = false,
+            enable = true,
+            update_debounce = 200,
+            max_file_length = 5000,
+            hl_groups = {
+                ObsidianTodo = { bold = true, fg = "#d4be98" }, -- green
+                ObsidianDone = { bold = true, fg = "#d8a657" }, -- yellow
+                ObsidianRightArrow = { bold = true, fg = "#7daea3" }, -- blue
+                ObsidianTilde = { bold = true, fg = "#d3869b" }, -- purple
+                ObsidianImportant = { bold = true, fg = "#ea6962" }, -- red
+                ObsidianBullet = { bold = true, fg = "#d4be98" }, -- foreground
+                ObsidianRefText = { underline = false, bold = true, fg = "#7daea3" }, -- blue
+                ObsidianExtLinkIcon = { fg = "#d3869b" }, -- purple
+                ObsidianTag = { italic = true, fg = "#89b482" }, -- aqua
+                ObsidianBlockID = { italic = true, fg = "#7c6f64" }, -- gray
+                ObsidianHighlightText = { bg = "#5b534d" }, -- selection background
+            },
         },
         picker = { name = "fzf-lua" },
         sort_by = "modified",
@@ -97,8 +112,8 @@ return {
 
         -- Callback to set up keymaps when entering a note
         callbacks = {
+            -- Smart action remap
             enter_note = function(_, note)
-                -- Remove default Enter mapping and add Tab for smart_action
                 vim.keymap.del("n", "<CR>", { buffer = note.bufnr })
                 vim.keymap.set("n", "<C-y>", function()
                     return require("obsidian").util.smart_action()
