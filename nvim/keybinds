@@ -18,7 +18,7 @@ Obsidian:
 <leader>ns = show tags
 <leader>nf = search notes
 <leader>nt = open persistent todo note
-<leader>nc = open quick switcher
+<leader>nc = open table of contents
 <C-y> = follow link, activate checkbox (can't be tab due to C-i clash)
 [o = jump to previous link
 ]o = jump to next link

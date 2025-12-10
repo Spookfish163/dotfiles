@@ -1,39 +1,36 @@
-;; Right hand symbols layer "v" to activate
-;; Left hand number layer "m" to activate
-
 (defcfg
   process-unmapped-keys yes
 )
 
 (defsrc
-  1    2    3    4    5    6    7    8    9    0 min =
-  q    w    e    r    t    y    u    i    o    p    [    ]    
-  a    s    d    f    g    h    j    k    l    ;    '
-  \    z    x    c    v    b    n    m    ,    .    /
+    1      2    3    4    5    6    7    8    9    0    min  =
+    q      w    e    r    t    y    u    i    o    p    [    ]
+    a      s    d    f    g    h    j    k    l    ;    '
+IntlBackslash z x    c    v    b    n    m    ,    .    /
 )
 
 (deflayer base
-  1    2    3    4    5    6    7    8    9    0 min =
-  q    w    e    r    t    y    u    i    o    p    [    ]    
-  a    s    d    f    g    h    j    k    l    ;    '
-  \    z    x    c    @sym-layer    b    n    @num-layer    ,    .    /
+  1    2    3    4    5    6    7    8    9    0    min  =
+  q    w    e    r    t    y    u    i    o    p    [    ]
+  a    s @symbols f   g    h    j @numbers l   ;    '
+  rpt  z    x    c    v    b    n    m    ,    .    /
 )
 
 (deflayer symbols
-  _    _    _    _    _    S-6             S-7  S-8   S-9 S-0 _    _ 
-  _    _    _    _    _    S-IntlBackslash [    S-[   ]   S-] _    _    
-  _    _    _    _    _    S-4             S-9 S-0 S-min  min _
-  _    _    _    _    _    _               S-7  S-2   S-, S-. S-8
+  _    _    _    _    _    S-6  S-7  S-8   S-9 S-0 _    _
+  _    _    _    _    _ S-IntlBackslash [    S-[   ]   S-] _    _    
+  S-5  S-1  _ S-Slash =    S-4  min  S-2 S-9 S-0 IntlBackslash
+  _    _    _    _    _    _    S-7  S-min   S-, S-. S-8
 )
 
 (deflayer numbers
   S-1           S-2  S-3  S-4  S-5  S-6  _    _    _    _    _    _
   Backslash     7    8    9    +    _    _    _    _    _    _    _
-  0             4    5    6    =    _    _    _    _    _    _
-  _ S-Backslash 1    2    3    S-1  _    _    _    _    _
+  0             4    5    6    =    _ Backspace _ Delete  S-6  _
+  IntlBackslash S-Backslash 1    2    3 Backquote _  _    _    S-.  _
 )
 
 (defalias
-  sym-layer (tap-hold 150 150 v (layer-toggle symbols))
-  num-layer (tap-hold 200 200 m (layer-toggle numbers))
+  symbols (tap-hold-release 180 180 d (layer-toggle symbols))
+  numbers (tap-hold-release 180 180 k (layer-toggle numbers))
 )

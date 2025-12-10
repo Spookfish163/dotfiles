@@ -1,0 +1,54 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+              1    2    3    4    5    6    7    8    9    0    min  =
+              q    w    e    r    t    y    u    i    o    p    [    ]
+              a    s    d    f    g    h    j    k    l    ;    '
+IntlBackslash z    x    c    v    b    n    m    ,    .    /
+                                    spc
+)
+
+(deflayer base
+              1    2    3     4       5    6    7     8    9    0    min  =
+              q    d    l     y       v    j    f     o    u    ,    [    ]
+              s    t @symbols @repeat g    b    n @numbers e    i    ;
+IntlBackslash x    k    m     c       w    p    h     '    z    .
+                                    @qwerty
+)
+
+(deflayer symbols
+     _   _   _       _   _   S-6           S-7   S-8  S-9  S-0  _    _
+     _   _   _       _   _ S-IntlBackslash [     S-[  ]    S-]  _    _    
+     S-5 S-1 _   S-Slash =   S-4           min   S-2  S-9  S-0  S-6
+ _   _   _   _   Slash   _   S-7           S-min S-,  S-.  S-8
+                                    _
+)
+
+(deflayer numbers
+    S-1           S-2  S-3  S-4  S-5  S-6  _    _    _    _    _    _
+    Backslash     7    8    9    +    _    _    _    _    _    _    _
+    0             4    5    6    =    _    Backspace _ Delete  Slash _
+  / S-Backslash 1    2    3 Backquote _    S-;  _   S-.  _
+                                    _
+)
+
+(deflayer qwerty
+              1    2    3    4    5    6    7    8    9    0    min  =
+              q    w    e    r    t    y    u    i    o    p    [    ]
+              a    s    d    f    g    h    j    k    l    ;    '
+IntlBackslash z    x    c    v    b    n    m    ,    .    /
+                                    _
+)
+
+(defalias
+  symbols (tap-hold-release 180 180 r (layer-toggle symbols))
+  numbers (tap-hold-release 180 180 a (layer-toggle numbers))
+  qwerty (tap-hold-release 180 180 Space (layer-toggle qwerty))
+  repeat (switch
+    ((key-history u 1)) e break
+    ((key-history k 1)) s break
+    () rpt break
+  )
+)
