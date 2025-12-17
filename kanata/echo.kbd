@@ -43,12 +43,28 @@ IntlBackslash z    x    c    v    b    n    m    ,    .    /
 )
 
 (defalias
-  symbols (tap-hold-release 180 180 r (layer-toggle symbols))
-  numbers (tap-hold-release 180 180 a (layer-toggle numbers))
-  qwerty (tap-hold-release 180 180 Space (layer-toggle qwerty))
+  symbols (tap-hold-release 150 150 r (layer-toggle symbols))
+  numbers (tap-hold-release 150 150 a (layer-toggle numbers))
+  qwerty (tap-hold-release 150 150 Space (layer-toggle qwerty))
   repeat (switch
+    ((and (key-history spc 3) (key-history a 2) (key-history s 1))) k break
+    ((and (key-history spc 2) (key-history b 1))) (macro e c a u s e) break
+    ((and (key-history spc 2) (key-history s 1))) k break
+    ((and (key-history spc 2) (key-history m 1))) y break
+    ((and (key-history spc 2) (key-history w 1))) (macro o u l d) break
+    ((and (key-history spc 2) (key-history c 1))) (macro o u l d) break
+    ((and (key-history spc 2) (key-history o 1))) (macro t h e r) break
+    ((and (key-history spc 2) (key-history p 1))) (macro e o p l e) break
+    ((and (key-history spc 2) (key-history o 1))) (macro t h e r) break
+    ((and (key-history o 2) (key-history u 1))) ' break
+    ((key-history spc 1)) (macro t h e) break
     ((key-history u 1)) e break
+    ((key-history z 1)) e break
     ((key-history k 1)) s break
+    ((key-history b 1)) j break
+    ((key-history a 1)) (macro n d)break
+    ((key-history i 1)) (macro n g) break
+    ((key-history h 1)) (macro a t) break
     () rpt break
   )
 )
