@@ -12,9 +12,9 @@ IntlBackslash z    x    c    v    b    n    m    ,    .    /
 
 (deflayer base
               1    2    3     4       5    6    7     8    9    0    min  =
-              q    d    l     y       v    j    f     o    u    ,    [    ]
-              s    t @symbols @repeat g    b    n @numbers e    i    ;
-IntlBackslash x    k    m     c       w    p    h     '    z    .
+              q    d    l     y       g    j    f     o    u    .    [    ]
+              s    t @symbols @repeat w    p    n @numbers e    i    ;
+IntlBackslash x    k    m     c       v    b    h     '    z    ,
                                     @qwerty
 )
 
@@ -30,41 +30,47 @@ IntlBackslash x    k    m     c       w    p    h     '    z    .
     S-1           S-2  S-3  S-4  S-5  S-6  _    _    _    _    _    _
     Backslash     7    8    9    +    _    _    _    _    _    _    _
     0             4    5    6    =    _    Backspace _ Delete  Slash _
-  / S-Backslash 1    2    3 Backquote _    S-;  _   S-.  _
+  / .             1    2    3    /    _    S-;  _   S-.  _
                                     _
 )
 
 (deflayer qwerty
-              1    2    3    4    5    6    7    8    9    0    min  =
-              q    w    e    r    t    y    u    i    o    p    [    ]
-              a    s    d    f    g    h    j    k    l    ;    '
-IntlBackslash z    x    c    v    b    n    m    ,    .    /
+              1    2    3    4    5    6    7         8          9      0    min  =
+              q    w    e    r    t    y    u      ArrowUp       o      p    [    ]
+              a    s    d    f    g    h ArrowLeft ArrowDown ArrowRight ;    '
+IntlBackslash z    x    c    v    b    n    m    ,    .          /
                                     _
 )
 
 (defalias
-  symbols (tap-hold-release 150 150 r (layer-toggle symbols))
-  numbers (tap-hold-release 150 150 a (layer-toggle numbers))
-  qwerty (tap-hold-release 150 150 Space (layer-toggle qwerty))
+  symbols (tap-hold-release 175 175 r (layer-toggle symbols))
+  numbers (tap-hold-release 175 175 a (layer-toggle numbers))
+  qwerty (tap-hold-release 175 175 Space (layer-toggle qwerty))
   repeat (switch
     ((and (key-history spc 3) (key-history a 2) (key-history s 1))) k break
     ((and (key-history spc 2) (key-history b 1))) (macro e c a u s e) break
+    ((and (key-history spc 2) (key-history p 1))) (macro e o p l e) break
     ((and (key-history spc 2) (key-history s 1))) k break
     ((and (key-history spc 2) (key-history m 1))) y break
-    ((and (key-history spc 2) (key-history w 1))) (macro o u l d) break
-    ((and (key-history spc 2) (key-history c 1))) (macro o u l d) break
-    ((and (key-history spc 2) (key-history o 1))) (macro t h e r) break
-    ((and (key-history spc 2) (key-history p 1))) (macro e o p l e) break
-    ((and (key-history spc 2) (key-history o 1))) (macro t h e r) break
+
+    ((and (key-history a 2) (key-history p 1))) p break
+    ((and (key-history e 2) (key-history p 1))) p break
+    ((and (key-history i 2) (key-history p 1))) p break
+    ((and (key-history o 2) (key-history p 1))) p break
+    ((and (key-history u 2) (key-history p 1))) p break
+
     ((and (key-history o 2) (key-history u 1))) ' break
+    ((and (key-history spc 2) (key-history t 1))) (macro h e) break
     ((key-history spc 1)) (macro t h e) break
     ((key-history u 1)) e break
     ((key-history z 1)) e break
     ((key-history k 1)) s break
     ((key-history b 1)) j break
+    ((key-history p 1)) h break
     ((key-history a 1)) (macro n d)break
     ((key-history i 1)) (macro n g) break
     ((key-history h 1)) (macro a t) break
+    ((key-history y 1)) (macro o u) break
     () rpt break
   )
 )
