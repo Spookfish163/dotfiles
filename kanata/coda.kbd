@@ -12,9 +12,9 @@ IntlBackslash z    x    c    v    b    n    m    ,    .    /
 
 (deflayer base
               1    2    3     4      5    6    7     8    9    0    min  =
-              v    d    l     w      g    q    j     o    u    ;    [    ]
-              s    t   @sym   y      p    b    n    @num  e    i    .
-    Slash     x    k    m     c      f   @mag  h     '    z    ,
+              v    d    l     p      f    q    j     o    u    ;    [    ]
+              s    t   @sym   c      g    b    n    @num  e    i    .
+    Slash     x    k    m     y      w   @mag  h     '    z    ,
                                     @nav
 )
 
@@ -56,6 +56,7 @@ IntlBackslash z    x    c    v    b    n    m    ,    .          /
     ((key-history u 1)) e break
     ((key-history z 1)) e break
     ((key-history k 1)) s break
+    ((key-history y 1)) p break
     () rpt break
   )
 )
