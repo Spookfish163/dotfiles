@@ -3,49 +3,66 @@
 )
 
 (defsrc
-              1    2    3    4    5    6    7    8    9    0    min  =
-              q    w    e    r    t    y    u    i    o    p    [    ]
-              a    s    d    f    g    h    j    k    l    ;    '
-IntlBackslash z    x    c    v    b    n    m    ,    .    /
-                                    spc
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    [    ]
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
+                         AltLeft   spc
 )
 
 (deflayer base
-              1    2    3     4      5    6    7     8    9    0    min  =
-              v    d    l     p      f    q    j     o    u    ;    [    ]
-              s    t   @sym   c      g    b    n    @num  e    i    .
-    Slash     x    k    m     y      w   @mag  h     '    z    ,
-                                    @nav
+           1    2    3     4      5    6    7     8    9    0    min  =
+           v    d    l     p      f    q    j     o    u    ;    [    @toqwerty
+           s    t    r     y      g    b    n     a    e    i    .
+@osl       x    k    m     c      w   @mag  h     '    @z   @,   @osr
+                         @cantrip  @util
 )
 
-(deflayer sym
-     _   _   _       _       _   S-6           S-7   S-8  S-9  S-0  _    _
-     _   _   _       _       _ S-IntlBackslash [     S-[  ]    S-]  _    _    
-     S-5 S-1 _   S-Slash     =   S-4           min   S-2  S-9  S-0  S-6
- _   _   _   _ IntlBackslash _   S-7           S-min S-,  S-.  S-8
-                                    _
+(deflayer util
+           S-1       S-2  S-3  S-4  S-5  S-6   S-7       S-8     S-9    S-0    min  =
+           1         2    3    4    5    6     7         8       9      0      [    ]
+           S-1       S-/  S-9  S-0  =    min   Backspace Delete  S-[    S-]    Backslash
+_          [       ]   S-min S-4  S-7  +     S-2       S-,     S-.    S-8  _
+                             _      _
 )
 
-(deflayer num
-              S-1       S-2  S-3  S-4             S-5  S-6  _    _    _    _    _    _
-              Backslash 7    8    9               +    _    _    _    _    _    _    _
-              0         4    5    6               =    _    Backspace _ Delete  Slash _
-IntlBackslash .         1    2    3 IntlBackslash _    S-;  _   S-.  _
-                                    _
+(deflayer qwerty
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    [    @tobase
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
+                         AltLeft   spc
 )
 
-(deflayer nav
-              1    2    3    4    5    6    7         8          9      0    min  =
-              q    w    e    r    t    y    u      ArrowUp       o      p    [    ]
-              a    s    d    f    g    h ArrowLeft ArrowDown ArrowRight ;    '
-IntlBackslash z    x    c    v    b    n    m    ,    .          /
-                                    _
+(defchords sym_chord 60
+    (z) z
+    (,) ,
+    (z ,) /
+)
+
+(defchords cap_chord 200
+    (osl) (one-shot 1000 ShiftLeft)
+    (osr) (one-shot 1000 ShiftRight)
+    (osl osr) (caps-word 2000)
 )
 
 (defalias
-  sym (tap-hold-release 180 180 r (layer-toggle sym))
-  num(tap-hold-release 180 180 a (layer-toggle num))
-  nav (tap-hold-release 180 180 Space (layer-toggle nav))
+  toqwerty (tap-hold 500 500 ] (layer-switch qwerty))
+  tobase (tap-hold 500 500 ] (layer-switch base))
+
+  util (tap-hold-release 180 180 spc (layer-toggle util))
+
+  osl (chord cap_chord osl)
+  osr (chord cap_chord osr)
+
+  z (chord sym_chord z)
+  , (chord sym_chord ,)
+
+  cantrip (switch
+    ((key-history n 1)) n break
+    ((key-history b 1)) b break
+    () AltLeft break
+  )
 
   mag (switch
     ((and (key-history spc 2) (key-history s 1))) k break
@@ -54,9 +71,10 @@ IntlBackslash z    x    c    v    b    n    m    ,    .          /
     ((and (key-history o 2) (key-history u 1))) ' break
 
     ((key-history u 1)) e break
+    ((key-history a 1)) o break
     ((key-history z 1)) e break
     ((key-history k 1)) s break
-    ((key-history y 1)) p break
+    ((key-history . 1)) (macro . .) break
     () rpt break
   )
 )
