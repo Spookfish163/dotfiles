@@ -7,37 +7,50 @@
            q    w    e    r    t    y    u    i    o    p    [    ]
            a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-                         AltLeft   spc
+ControlLeft             AltLeft   spc
 )
 
 (deflayer base
            1    2    3     4      5    6    7     8    9    0    min  =
-           v    d    l     p      f    q    j     o    u    ;    [    @toqwerty
-           s    t    r     y      g    b    n     a    e    i    .
-@osl       x    k    m     c      w   @mag  h     '    @z   @,   @osr
-                         @cantrip  @util
+           z    d    l     f      w    x    j     o    u    q    @[1  @]1
+           s    t    r     c      y    b    n     a    e    i    .
+@osl       v    k    m     p      g   @mag  h     '    @;   @,   @osr
+ControlLeft             @cantrip  @util
 )
 
 (deflayer util
            S-1       S-2  S-3  S-4  S-5  S-6   S-7       S-8     S-9    S-0    min  =
            1         2    3    4    5    6     7         8       9      0      [    ]
-           S-1       S-/  S-9  S-0  =    min   Backspace Delete  S-[    S-]    Backslash
-_          [       ]   S-min S-4  S-7  +     S-2       S-,     S-.    S-8  _
-                             _      _
+           S-[       S-]  S-9  S-0 S-min S-4  Backspace Delete  S-/    S-1    Backslash
+_          S-7       [    ]    min  +  =   S-2       S-,     S-.    S-8  _
+_                            _      _
 )
 
 (deflayer qwerty
            1    2    3    4    5    6    7    8    9    0    min  =
-           q    w    e    r    t    y    u    i    o    p    [    @tobase
+           q    w    e    r    t    y    u    i    o    p    @[2  @]2
            a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-                         AltLeft   spc
+ControlLeft             AltLeft   spc
 )
 
-(defchords sym_chord 60
-    (z) z
+
+(defchords toqwerty_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @toqwerty
+)
+
+(defchords tobase_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @tobase
+)
+
+(defchords sym_chord 80
+    (;) ;
     (,) ,
-    (z ,) /
+    (; ,) /
 )
 
 (defchords cap_chord 200
@@ -47,21 +60,32 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 )
 
 (defalias
-  toqwerty (tap-hold 500 500 ] (layer-switch qwerty))
-  tobase (tap-hold 500 500 ] (layer-switch base))
+  [1 (chord toqwerty_chord [)
+  ]1 (chord toqwerty_chord ])
+  [2 (chord tobase_chord [)
+  ]2 (chord tobase_chord ])
 
-  util (tap-hold-release 180 180 spc (layer-toggle util))
+  toqwerty (layer-switch qwerty)
+  tobase (layer-switch base)
+
+  util (tap-hold-release 180 160 spc (layer-toggle util))
 
   osl (chord cap_chord osl)
   osr (chord cap_chord osr)
 
-  z (chord sym_chord z)
+  ; (chord sym_chord ;)
   , (chord sym_chord ,)
 
-  cantrip (switch
-    ((key-history n 1)) n break
-    ((key-history b 1)) b break
-    () AltLeft break
+
+  cantrip (tap-hold 0 200 
+    (switch
+      ((key-history n 1)) n break
+      ((key-history b 1)) b break
+      ((key-history e 1)) e break
+      ((key-history o 1)) o break
+      () XX break
+    )
+    AltLeft
   )
 
   mag (switch
@@ -70,9 +94,10 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 
     ((and (key-history o 2) (key-history u 1))) ' break
 
+    ((and (key-history ShiftLeft 2) (key-history q 1))) (macro u e) break
+    ((key-history q 1)) (macro u e) break
     ((key-history u 1)) e break
     ((key-history a 1)) o break
-    ((key-history z 1)) e break
     ((key-history k 1)) s break
     ((key-history . 1)) (macro . .) break
     () rpt break
