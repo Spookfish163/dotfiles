@@ -1,0 +1,94 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    [    ]
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    F13  n    m    ,    .    /    ShiftRight
+                                 spc    F14
+)
+
+(deflayer base
+           1    2    3     4      5    6     7     8    9    0    min  =
+           f    d    l     m      p    x     j     o    u    q    @[1  @]1
+           s    t    r     y      c    b     n     a    e    i    ,
+@osl       z    k    w     g      v    k     @mag  h     '    @;   @.   @osr
+                                _       @util   
+)
+
+(deflayer util
+           S-1       S-2  S-3  S-4  S-5  S-6   S-7       S-8     S-9    S-0    min  =
+           1         2    3    4    5    6     7         8       9      0      [    ]
+           S-[       S-]  S-9  S-0 S-min S-4  Backspace C-Backspace S-/    S-1    Backslash
+_          S-7       [    ]    min  +    _     =   S-2       S-,     S-.    S-8  _
+                             _      _
+)
+
+(deflayer qwerty
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    @[2  @]2
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    b    n    m    ,    .    /    ShiftRight
+                                spc   spc
+)
+
+
+(defchords toqwerty_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @toqwerty
+)
+
+(defchords tobase_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @tobase
+)
+
+(defchords sym_chord 80
+    (;) ;
+    (.) .
+    (; .) /
+)
+
+(defchords cap_chord 200
+    (osl) (one-shot 1000 ShiftLeft)
+    (osr) (one-shot 1000 ShiftRight)
+    (osl osr) (caps-word 2000)
+)
+
+(defalias
+  [1 (chord toqwerty_chord [)
+  ]1 (chord toqwerty_chord ])
+  [2 (chord tobase_chord [)
+  ]2 (chord tobase_chord ])
+
+  toqwerty (layer-switch qwerty)
+  tobase (layer-switch base)
+
+  util (layer-while-held util)
+
+  osl (chord cap_chord osl)
+  osr (chord cap_chord osr)
+
+  ; (chord sym_chord ;)
+  . (chord sym_chord .)
+
+  mag (switch
+    ((and (key-history spc 2) (key-history s 1))) k break
+    ((and (key-history spc 3) (key-history ShiftRight 2) (key-history s 1))) k break
+
+    ((and (key-history o 2) (key-history u 1))) ' break
+
+    ((and (key-history ShiftLeft 2) (key-history q 1))) (macro u e) break
+    ((key-history q 1)) (macro u e n) break
+    ((key-history u 1)) e break
+    ((key-history y 1)) p break
+    ((key-history a 1)) o break
+    ((key-history k 1)) s break
+    ((key-history . 1)) (macro . .) break
+    () rpt break
+  )
+)
