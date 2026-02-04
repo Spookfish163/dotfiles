@@ -7,23 +7,23 @@
            q    w    e    r    t    y    u    i    o    p    [    ]
            a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-ControlLeft             AltLeft   spc
+                                 spc   AltRight    F14
 )
 
 (deflayer base
-           1    2    3     4      5    6    7     8    9    0    min  =
-           z    d    l     f      w    x    j     o    u    q    @[1  @]1
-           s    t    r     c      y    b    n     a    e    i    .
-@osl       v    k    m     p      g   @mag  h     '    @;   @,   @osr
-ControlLeft             @cantrip  @util
+           1    2    3     4      5    6     7     8    9    0    min  =
+           f    d    l     m      p    x     j     o    u    q    @[1  @]1
+           s    t    r     y      c    b     n     a    e    i    ,
+@osl       z    k    w     g      v    @mag  h     '    @;   @.   @osr
+                                _     _    @util
 )
 
 (deflayer util
-           S-1       S-2  S-3  S-4  S-5  S-6   S-7       S-8     S-9    S-0    min  =
-           1         2    3    4    5    6     7         8       9      0      [    ]
-           S-[       S-]  S-9  S-0 S-min S-4  Backspace Delete  S-/    S-1    Backslash
-_          S-7       [    ]    min  +  =   S-2       S-,     S-.    S-8  _
-_                            _      _
+  S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  min  =
+  1    2    3    4    5    6    7    8    9    0    [    ]
+  S-min     ArrowUp   S-4        S-9  S-0  = Backspace C-Backspace S-/    S-1    S-Backslash
+_ ArrowLeft ArrowDown ArrowRight S-[  S-]  +  min      S-,         S-.    S-8  _
+                             _      _    _
 )
 
 (deflayer qwerty
@@ -31,7 +31,7 @@ _                            _      _
            q    w    e    r    t    y    u    i    o    p    @[2  @]2
            a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-ControlLeft             AltLeft   spc
+                                spc   _   spc
 )
 
 
@@ -49,8 +49,8 @@ ControlLeft             AltLeft   spc
 
 (defchords sym_chord 80
     (;) ;
-    (,) ,
-    (; ,) /
+    (.) .
+    (; .) /
 )
 
 (defchords cap_chord 200
@@ -68,35 +68,25 @@ ControlLeft             AltLeft   spc
   toqwerty (layer-switch qwerty)
   tobase (layer-switch base)
 
-  util (tap-hold-release 180 160 spc (layer-toggle util))
+  util (layer-while-held util)
 
   osl (chord cap_chord osl)
   osr (chord cap_chord osr)
 
   ; (chord sym_chord ;)
-  , (chord sym_chord ,)
-
-
-  cantrip (tap-hold 0 200 
-    (switch
-      ((key-history n 1)) n break
-      ((key-history b 1)) b break
-      ((key-history e 1)) e break
-      ((key-history o 1)) o break
-      () XX break
-    )
-    AltLeft
-  )
+  . (chord sym_chord .)
 
   mag (switch
     ((and (key-history spc 2) (key-history s 1))) k break
     ((and (key-history spc 3) (key-history ShiftRight 2) (key-history s 1))) k break
+    ((and (key-history spc 3) (key-history ShiftLeft 2) (key-history s 1))) k break
 
     ((and (key-history o 2) (key-history u 1))) ' break
 
     ((and (key-history ShiftLeft 2) (key-history q 1))) (macro u e) break
-    ((key-history q 1)) (macro u e) break
+    ((key-history q 1)) (macro u e n) break
     ((key-history u 1)) e break
+    ((key-history y 1)) p break
     ((key-history a 1)) o break
     ((key-history k 1)) s break
     ((key-history . 1)) (macro . .) break
