@@ -7,7 +7,7 @@
            q    w    e    r    t    y    u    i    o    p    [    ]
            a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-                                 spc    F14   AltRight
+                        spc
 )
 
 (deflayer base
@@ -15,15 +15,15 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
            f    d    l     m      p    x     j     o    u    q    @[1  @]1
            s    t    r     y      c    b     n     a    e    i    ,
 @osl       z    k    w     g      v    @mag  h     '    @;   @.   @osr
-                                _     @mag    @util
+                            @util
 )
 
 (deflayer util
   S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  min  =
   1    2    3    4    5    6    7    8    9    0    [    ]
-  S-min     ArrowUp   S-4        S-9  S-0  = C-Backspace Delete S-/    S-1    S-Backslash
-_ ArrowLeft ArrowDown ArrowRight S-[  S-]  +  min      S-,         S-.    S-8  _
-                             _      _    _
+  S-min     ArrowUp   S-4        S-9  S-0   = Backspace C-Backspace S-/    S-1    S-Backslash
+_ ArrowLeft ArrowDown ArrowRight S-[  S-]   +  min   S-, S-.    S-8  _
+                             _
 )
 
 (deflayer qwerty
@@ -31,7 +31,7 @@ _ ArrowLeft ArrowDown ArrowRight S-[  S-]  +  min      S-,         S-.    S-8  _
            q    w    e    r    t    y    u    i    o    p    @[2  @]2
            a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-                                spc   _   spc
+                                spc
 )
 
 
@@ -68,7 +68,7 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
   toqwerty (layer-switch qwerty)
   tobase (layer-switch base)
 
-  util (layer-toggle util)
+  util (tap-hold-release 180 160 spc (layer-toggle util))
 
   osl (chord cap_chord osl)
   osr (chord cap_chord osr)
