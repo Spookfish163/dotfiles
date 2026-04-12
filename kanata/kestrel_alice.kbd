@@ -1,0 +1,84 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    [    ]
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
+                        spc   Backspace    F14   AltRight
+)
+
+(deflayer base
+           1    2    3     4      5    6     7     8    9    0    min  =
+           f    d    l     m      w    q     j     o    u    /    @[1  @]1
+           s    t    r     y      g    b     n     a    e    i    .
+@osl       x    z    k     c      v    p     h     '    @;   @,   @osr
+                            _   Backspace  @mag    @util
+)
+
+(deflayer util
+  S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  min  =
+  S-1  +    min  = Delete  XX   S-[  S-9  S-0  S-]  _    _
+  1    2    3    4    5    6    7    8    9    0    _
+_ ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX  S-min   S-4   S-, S-. _
+                             _   _   _    _
+)
+
+(deflayer qwerty
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    @[2  @]2
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
+                                spc  _   spc  _
+)
+
+
+(defchords toqwerty_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @toqwerty
+)
+
+(defchords tobase_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @tobase
+)
+
+(defchords sym_chord 80
+    (;) ;
+    (,) ,
+    (; ,) /
+)
+
+(defchords cap_chord 200
+    (osl) (one-shot 500 ShiftLeft)
+    (osr) (one-shot 500 ShiftRight)
+    (osl osr) (caps-word 1000)
+)
+
+(defalias
+  [1 (chord toqwerty_chord [)
+  ]1 (chord toqwerty_chord ])
+  [2 (chord tobase_chord [)
+  ]2 (chord tobase_chord ])
+
+  toqwerty (layer-switch qwerty)
+  tobase (layer-switch base)
+
+  util (layer-toggle util)
+
+  osl (chord cap_chord osl)
+  osr (chord cap_chord osr)
+
+  ; (chord sym_chord ;)
+  , (chord sym_chord ,)
+
+  mag (switch
+    ((and (key-history o 2) (key-history u 1))) ' break
+    ((key-history u 1)) e break
+    () rpt break
+  )
+)
