@@ -3,33 +3,37 @@
 )
 
 (defsrc
+            Escape
            1    2    3    4    5    6    7    8    9    0    min  =
            q    w    e    r    t    y    u    i    o    p    [    ]
-           a    s    d    f    g    h    j    k    l    ;    '
+CapsLock   a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
                         spc   Backspace    F14   AltRight
 )
 
 (deflayer base
+            CapsLock 
            1    2    3     4      5    6     7     8    9    0    min  =
            f    d    l     m      w    q     j     o    u    /    @[1  @]1
-           s    t    r     y      g    b     n     a    e    i    .
-@osl       x    z    k     c      v    p     h     '    @;   @,   @osr
-                            _   Backspace  @mag    @util
+Escape     s    t    r     y      g    b     n     a    e    i    .
+@osl       x    z    k     c      v    p     h     '    ;    ,    @osr
+                          spc   Backspace  @mag    @util
 )
 
 (deflayer util
-  S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  min  =
-  S-1  +    min  = Delete  XX   S-[  S-9  S-0  S-]  _    _
-  1    2    3    4    5    6    7    8    9    0    _
+    _
+   S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  min  =
+_  S-1  +    min  = Delete  XX   S-[  S-9  S-0  S-]  _    _
+   1    2    3    4    5    6    7    8    9    0    _
 _ ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX  S-min   S-4   S-, S-. _
                              _   _   _    _
 )
 
 (deflayer qwerty
+            CapsLock
            1    2    3    4    5    6    7    8    9    0    min  =
            q    w    e    r    t    y    u    i    o    p    @[2  @]2
-           a    s    d    f    g    h    j    k    l    ;    '
+Escape     a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
                                 spc  _   spc  _
 )
@@ -47,15 +51,9 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
     ([ ]) @tobase
 )
 
-(defchords sym_chord 80
-    (;) ;
-    (,) ,
-    (; ,) /
-)
-
-(defchords cap_chord 200
-    (osl) (one-shot 500 ShiftLeft)
-    (osr) (one-shot 500 ShiftRight)
+(defchords caps_word 200
+    (osl) ShiftLeft
+    (osr) ShiftRight
     (osl osr) (caps-word 1000)
 )
 
@@ -70,13 +68,12 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 
   util (layer-toggle util)
 
-  osl (chord cap_chord osl)
-  osr (chord cap_chord osr)
-
-  ; (chord sym_chord ;)
-  , (chord sym_chord ,)
+  osl (chord caps_word osl)
+  osr (chord caps_word osr)
 
   mag (switch
+    ((and (key-history d 3) (key-history o 2) (key-history n 1))) ' break
+    ((and (key-history w 3) (key-history o 2) (key-history n 1))) ' break
     ((and (key-history o 2) (key-history u 1))) ' break
     ((key-history u 1)) e break
     () rpt break
