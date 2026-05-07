@@ -76,6 +76,7 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 
     ((key-history u 1)) e break
     ((key-history spc 1)) ShiftRight break
+    ((key-history Enter 1)) ShiftRight break
     ((key-history ' 1)) ShiftRight break
     ((key-history - 1)) ShiftRight break
     ((key-history ShiftRight 1)) ShiftRight break
