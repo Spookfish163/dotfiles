@@ -1,0 +1,81 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    [    ]
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
+                        spc   Backspace    F14   AltRight
+)
+
+(deflayer base
+           1    2    3     4      5    6     7     8    9    0    min  =
+           v    l    d     m      g    x     f     o    u    /    @[1  @]1
+           s    r    t     y      p    b     n     a    e    i    .
+@sl        z    q    k     c      w    j     h     '    ;    ,    @sr
+                          spc   Backspace  @mag    @util
+)
+
+(deflayer util
+   S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  min  =
+   S-1  +    min  = Delete  XX   S-[  S-9  S-0  S-]  _    _
+   1    2    3    4    5    6    7    8    9    0    _
+_ ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX  S-min   S-4   S-, S-. _
+                             _   C-Backspace   _    _
+)
+
+(deflayer qwerty
+           1    2    3    4    5    6    7    8    9    0    min  =
+           q    w    e    r    t    y    u    i    o    p    @[2  @]2
+           a    s    d    f    g    h    j    k    l    ;    '
+ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
+                                spc  _   spc  _
+)
+
+
+(defchords toqwerty_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @toqwerty
+)
+
+(defchords tobase_chord 100
+    ([) [
+    (]) ]
+    ([ ]) @tobase
+)
+
+(defalias
+  [1 (chord toqwerty_chord [)
+  ]1 (chord toqwerty_chord ])
+  [2 (chord tobase_chord [)
+  ]2 (chord tobase_chord ])
+
+  toqwerty (layer-switch qwerty)
+  tobase (layer-switch base)
+
+  util (layer-toggle util)
+
+  sl (tap-hold-press 1 120 S-1 ShiftLeft)
+  sr (tap-hold-press 1 120 S-/ ShiftRight)
+
+  mag (switch
+    ((and (key-history d 3) (key-history o 2) (key-history n 1))) ' break
+    ((and (key-history w 3) (key-history o 2) (key-history n 1))) ' break
+
+    ((and (key-history o 2) (key-history u 1))) ' break
+    ((and (key-history c 2) (key-history k 1))) l break
+
+    ((key-history u 1)) e break
+    ((key-history spc 1)) ShiftRight break
+    ((key-history Enter 1)) ShiftRight break
+    ((key-history ' 1)) ShiftRight break
+    ((key-history - 1)) ShiftRight break
+    ((key-history ShiftRight 1)) ShiftRight break
+    ((key-history ShiftLeft 1)) ShiftRight break
+    ((key-history Backspace 1)) ShiftRight break
+    () rpt break
+  )
+)
