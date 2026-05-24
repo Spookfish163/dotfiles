@@ -36,16 +36,16 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 )
 
 (defchordsv2
-  (Backspace F14) @oss 50 all-released (qwerty)
+  (Backspace F14) @oss 60 all-released (qwerty)
 )
 
-(defchords toqwerty_chord 80
+(defchords toqwerty_chord 60
     ([) [
     (]) ]
     ([ ]) @toqwerty
 )
 
-(defchords tobase_chord 80
+(defchords tobase_chord 60
     ([) [
     (]) ]
     ([ ]) @tobase
