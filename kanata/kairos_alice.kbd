@@ -1,5 +1,6 @@
 (defcfg
   process-unmapped-keys yes
+  concurrent-tap-hold yes
 )
 
 (defsrc
@@ -34,21 +35,24 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
                                 spc  _   spc  _
 )
 
+(defchordsv2
+  (Backspace F14) @oss 50 all-released (qwerty)
+)
 
-(defchords toqwerty_chord 100
+(defchords toqwerty_chord 80
     ([) [
     (]) ]
     ([ ]) @toqwerty
 )
 
-(defchords tobase_chord 100
+(defchords tobase_chord 80
     ([) [
     (]) ]
     ([ ]) @tobase
 )
 
 (defalias
-  oss (one-shot 500 ShiftRight)
+  oss (one-shot 600 ShiftRight)
 
   [1 (chord toqwerty_chord [)
   ]1 (chord toqwerty_chord ])
@@ -68,12 +72,18 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
     ((and (key-history w 3) (key-history o 2) (key-history n 1))) ' break
 
     ((and (key-history o 2) (key-history u 1))) ' break
+    ((and (key-history ShiftLeft 2) (key-history 9 1))) @oss break
+    ((and (key-history ShiftRight 2) (key-history 9 1))) @oss break
+    ((and (key-history ShiftLeft 2) (key-history 0 1))) @oss break
+    ((and (key-history ShiftRight 2) (key-history 0 1))) @oss break
 
     ((key-history u 1)) e break
     ((key-history spc 1)) @oss break
     ((key-history Enter 1)) @oss break
     ((key-history ' 1)) @oss break
     ((key-history - 1)) @oss break
+    ((key-history [ 1)) @oss break
+    ((key-history ] 1)) @oss break
     ((key-history ShiftRight 1)) @oss break
     ((key-history ShiftLeft 1)) @oss break
     ((key-history Backspace 1)) @oss break
