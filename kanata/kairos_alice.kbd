@@ -85,8 +85,8 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 
   util (layer-toggle util)
 
-  sl (tap-hold-press 1 130 S-1 ShiftLeft)
-  sr (tap-hold-press 1 130 S-/ ShiftRight)
+  sl (tap-hold-press 1 150 S-1 ShiftLeft)
+  sr (tap-hold-press 1 150 S-/ ShiftRight)
 
   mag (switch
     ((and (key-history d 3) (key-history o 2) (key-history n 1))) ' break
