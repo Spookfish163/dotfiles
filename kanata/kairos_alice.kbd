@@ -13,9 +13,9 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 
 (deflayer base
            1    2    3     4      5    6     7     8    9    0    @min1  @eq1
-           v    l    d     m      g    x     f     o    u    /    @[1    @]1
+           v    l    d     m      g    x     j     o    u    /    @[1    @]1
            s    r    t     y      p    b     n     a    e    i    .
-@sl        z    q    k     c      w    j     h     '    ;    ,    @sr
+@sl        z    q    k     c      w    f     h     '    ;    ,    @sr
                           spc   Backspace  @mag    @util
 )
 
@@ -39,28 +39,24 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
   (Backspace F14) @oss 60 all-released (qwerty)
 )
 
-;; -/= chord: on base, switches to qwerty
 (defchords toqwerty_chord 60
     (min) min
     (=) =
     (min =) @toqwerty
 )
 
-;; -/= chord: on qwerty, no-op (already there)
 (defchords noop_eqmin_chord 60
     (min) min
     (=) =
     (min =) XX
 )
 
-;; [/] chord: on qwerty, switches to base
 (defchords tobase_chord 60
     ([) [
     (]) ]
     ([ ]) @tobase
 )
 
-;; [/] chord: on base, no-op (already there)
 (defchords noop_brkt_chord 60
     ([) [
     (]) ]
@@ -68,7 +64,7 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 )
 
 (defalias
-  oss (one-shot 600 ShiftRight)
+  oss (one-shot 500 ShiftRight)
 
   min1 (chord toqwerty_chord min)
   eq1 (chord toqwerty_chord =)
@@ -89,6 +85,8 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
   sr (tap-hold-press 1 150 S-/ ShiftRight)
 
   mag (switch
+    ((key-timing 1 greater-than 500)) @oss break
+  
     ((and (key-history d 3) (key-history o 2) (key-history n 1))) ' break
     ((and (key-history w 3) (key-history o 2) (key-history n 1))) ' break
 
