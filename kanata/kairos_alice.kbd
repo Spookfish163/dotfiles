@@ -8,7 +8,7 @@
            q    w    e    r    t    y    u    i    o    p    [    ]
            a    s    d    f    g    h    j    k    l    ;    '
 ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-                        spc   Backspace    F14   AltRight
+                        spc   Backspace    F14   ControlRight
 )
 
 (deflayer base
