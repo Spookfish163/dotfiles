@@ -87,16 +87,11 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
   mag (switch
     ((key-timing 1 greater-than 500)) @oss break
   
-    ((and (key-history d 3) (key-history o 2) (key-history n 1))) ' break
-    ((and (key-history w 3) (key-history o 2) (key-history n 1))) ' break
-
-    ((and (key-history o 2) (key-history u 1))) ' break
     ((and (key-history ShiftLeft 2) (key-history 9 1))) @oss break
     ((and (key-history ShiftRight 2) (key-history 9 1))) @oss break
     ((and (key-history ShiftLeft 2) (key-history 0 1))) @oss break
     ((and (key-history ShiftRight 2) (key-history 0 1))) @oss break
 
-    ((key-history u 1)) e break
     ((key-history spc 1)) @oss break
     ((key-history Enter 1)) @oss break
     ((key-history ' 1)) @oss break
@@ -106,6 +101,9 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
     ((key-history ShiftRight 1)) @oss break
     ((key-history ShiftLeft 1)) @oss break
     ((key-history Backspace 1)) @oss break
+
+    ((key-history u 1)) e break
+
     () rpt break
   )
 )
