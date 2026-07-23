@@ -93,6 +93,7 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
     ((and (key-history ShiftRight 2) (key-history 0 1))) @oss break
 
     ((key-history spc 1)) @oss break
+    ((key-history Tab 1)) @oss break
     ((key-history Enter 1)) @oss break
     ((key-history ' 1)) @oss break
     ((key-history - 1)) @oss break
