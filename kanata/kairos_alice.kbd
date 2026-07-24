@@ -81,8 +81,8 @@ ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
 
   util (layer-toggle util)
 
-  sl (tap-hold-press 1 150 S-1 ShiftLeft)
-  sr (tap-hold-press 1 150 S-/ ShiftRight)
+  sl (tap-hold-press 1 180 S-1 ShiftLeft)
+  sr (tap-hold-press 1 180 S-/ ShiftRight)
 
   mag (switch
     ((key-timing 1 greater-than 500)) @oss break
