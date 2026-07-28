@@ -1,88 +1,80 @@
 (defcfg
   process-unmapped-keys yes
-  concurrent-tap-hold yes
 )
 
 (defsrc
-           1    2    3    4    5    6    7    8    9    0    min  =
-           q    w    e    r    t    y    u    i    o    p    [    ]
-           a    s    d    f    g    h    j    k    l    ;    '
-ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-                        spc   Backspace    F14   ControlRight
+1    2    3    4    5    6    7    8    9    0    min  =
+q    w    e    r    t    y    u    i    o    p    [    ]
+a    s    d    f    g    h    j    k    l    ;    '
+z    x    c    v    b    n    m    ,    .    /
+        spc   Backspace   F14   ControlRight
 )
 
 (deflayer base
-           1    2    3     4      5    6     7     8    9    0    @min1  @eq1
-           v    l    d     m      g    x     f     o    u    ,    @[1    @]1
-           s    r    t     y      p    b     n     a    e    i    '
-@sl        z    q    k     c      w    j     h     .    ;    /    @sr
-                          spc   Backspace  @mag    @util
+1    2    3    4    5    6    7    8    9    0    @min1 @eq1
+v    l    d    m    g    x    f    o    u    ,    @[1   @]1
+s    r    t    y    p    b    n    a    e    i    '
+z    q    k    c    w    j    h    .    ;    /
+        spc   Backspace   @mag  @util
 )
 
 (deflayer util
-   S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  min  =
-   +    =    min  S-9  S-0  XX   [    S-[  S-]  ]    _    _
-   1    2    3    4    5    6    7    8    9    0    _
-_ ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX  S-min   S-4   S-, S-. _
+     S-1   S-2   S-3   S-4   S-5   S-6   S-7   S-8   S-9   S-0   min   =
+     +     =     min   S-9   S-0   XX    [     S-[   S-]   ]     _     _
+     1     2     3     4     5     6     7     8     9     0     _
+ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX  S-min   S-4   S-, S-.
                              _   C-Backspace   _    _
 )
 
 (deflayer qwerty
-           1    2    3    4    5    6    7    8    9    0    @min2  @eq2
-           q    w    e    r    t    y    u    i    o    p    @[2    @]2
-           a    s    d    f    g    h    j    k    l    ;    '
-ShiftLeft  z    x    c    v    b    n    m    ,    .    /    ShiftRight
-                                spc  _   spc  _
+1    2    3    4    5    6    7    8    9    0    @min2 @eq2
+q    w    e    r    t    y    u    i    o    p    @[2   @]2
+a    s    d    f    g    h    j    k    l    ;    '
+z    x    c    v    b    n    m    ,    .    /
+        spc    _       spc    _
 )
 
-(defchordsv2
-  (Backspace F14) @oss 60 all-released (qwerty)
-)
-
-(defchords toqwerty_chord 60
+(defchords qwerty_chord 60
     (min) min
     (=) =
-    (min =) @toqwerty
+    (min =) @qwerty
 )
 
-(defchords noop_eqmin_chord 60
-    (min) min
-    (=) =
-    (min =) XX
-)
-
-(defchords tobase_chord 60
+(defchords base_chord 60
     ([) [
     (]) ]
-    ([ ]) @tobase
+    ([ ]) @base
 )
 
-(defchords noop_brkt_chord 60
+(defchords no_op1 60
     ([) [
     (]) ]
     ([ ]) XX
 )
 
+(defchords no_op2 60
+    (min) min
+    (=) =
+    (min =) XX
+)
+
 (defalias
   oss (one-shot 500 ShiftRight)
 
-  min1 (chord toqwerty_chord min)
-  eq1 (chord toqwerty_chord =)
-  [1 (chord noop_brkt_chord [)
-  ]1 (chord noop_brkt_chord ])
+  min1 (chord qwerty_chord min)
+  eq1 (chord qwerty_chord =)
+  [1 (chord no_op1 [)
+  ]1 (chord no_op1 ])
 
-  min2 (chord noop_eqmin_chord min)
-  eq2 (chord noop_eqmin_chord =)
-  [2 (chord tobase_chord [)
-  ]2 (chord tobase_chord ])
+  min2 (chord no_op2 min)
+  eq2 (chord no_op2 =)
+  [2 (chord base_chord [)
+  ]2 (chord base_chord ])
 
-  toqwerty (layer-switch qwerty)
-  tobase (layer-switch base)
+  qwerty (layer-switch qwerty)
+  base (layer-switch base)
 
   util (layer-toggle util)
-
-  sl (tap-hold-press 1 180 S-1 ShiftLeft)
-  sr (tap-hold-press 1 180 S-/ ShiftRight)
 
   mag (switch
     ((key-timing 1 greater-than 500)) @oss break
