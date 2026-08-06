@@ -6,7 +6,7 @@
 1    2    3    4    5    6    7    8    9    0    min  =
 q    w    e    r    t    y    u    i    o    p    [    ]
 a    s    d    f    g    h    j    k    l    ;    '
-z    x    c    v    b    n    m    ,    .    /
+z    x    c    v    b    F15  n    m    ,    .    /
         spc   Backspace   F14   ControlRight
 )
 
@@ -14,15 +14,15 @@ z    x    c    v    b    n    m    ,    .    /
 1    2    3    4    5    6    7    8    9    0    @min1 @eq1
 v    l    d    m    g    x    f    o    u    ,    @[1   @]1
 s    r    t    y    p    b    n    a    e    i    '
-z    q    k    c    w    j    h    .    ;    /
+z    q    k    c    w    min  j    h    .    ;    /
         spc   Backspace   @mag  @util
 )
 
 (deflayer util
      S-1   S-2   S-3   S-4   S-5   S-6   S-7   S-8   S-9   S-0   min   =
-     +     =     min   S-9   S-0   XX    [     S-[   S-]   ]     _     _
+     +     =     S-9   S-0  Delete XX    [     S-[   S-]   ]     _     _
      1     2     3     4     5     6     7     8     9     0     _
-ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX  S-min   S-4   S-, S-.
+ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX XX  S-min   S-4   S-, S-.
                              _   C-Backspace   _    _
 )
 
@@ -30,7 +30,7 @@ ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX  S-min   S-4   S-, S-.
 1    2    3    4    5    6    7    8    9    0    @min2 @eq2
 q    w    e    r    t    y    u    i    o    p    @[2   @]2
 a    s    d    f    g    h    j    k    l    ;    '
-z    x    c    v    b    n    m    ,    .    /
+z    x    c    v    b    b    n    m    ,    .    /
         spc    _       spc    _
 )
 
