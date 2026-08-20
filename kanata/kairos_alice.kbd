@@ -18,9 +18,9 @@ z    q    k    c    w    j    h    .    min  ;
         spc   Backspace   @mag  @util
 )
 
-(deflayer util
+(deflayer utility
      S-1   S-2   S-3   S-4   S-5   S-6   S-7   S-8   S-9   S-0   min   =
-     +     =     S-9   S-0  Delete XX    S-[   S-]   [     ]     _     _
+  Enter (unicode £) S-9 S-0  Delete XX    S-[   S-]   [     ]     _     _ 
      1     2     3     4     5     6     7     8     9     0     _
 ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX S-, S-. S-4 XX
                              _   C-Backspace   _    _
@@ -74,14 +74,14 @@ z    x    c    v    b    n    m    ,    .    /
   qwerty (layer-switch qwerty)
   base (layer-switch base)
 
-  util (layer-toggle util)
+  util (one-shot 1000 (layer-while-held utility))
 
   qmark (fork S-/ (unshift /) (lshft rshft))
 
   mag (switch
     ((key-timing 1 greater-than 500)) @oss break
   
-    ((key-history a 1)) rpt break
+    ((key-history a 1)) @oss break
     ((key-history b 1)) rpt break
     ((key-history c 1)) rpt break
     ((key-history d 1)) rpt break
@@ -89,7 +89,7 @@ z    x    c    v    b    n    m    ,    .    /
     ((key-history f 1)) rpt break
     ((key-history g 1)) rpt break
     ((key-history h 1)) rpt break
-    ((key-history i 1)) rpt break
+    ((key-history i 1)) @oss break
     ((key-history j 1)) rpt break
     ((key-history k 1)) rpt break
     ((key-history l 1)) rpt break
