@@ -22,7 +22,7 @@ z    j    k    c    x    p    h    .    min  ;
      S-1   S-2   S-3   S-4   S-5   S-6   S-7   S-8   S-9   S-0   min   =
   Enter (unicode £) S-9 S-0  Delete XX    S-[   S-]   [     ]     _     _ 
      1     2     3     4     5     6     7     8     9     0     _
-ControlLeft ArrowDown ArrowLeft ArrowRight ArrowUp XX S-, S-. S-4 XX
+ControlLeft ArrowDown ArrowUp ArrowLeft ArrowRight XX S-, S-. S-4 XX
                              _   C-Backspace   _    _
 )
 
@@ -59,7 +59,7 @@ z    x    c    v    b    n    m    ,    .    /
 )
 
 (defalias
-  oss (one-shot 1000 ShiftRight)
+  oss (one-shot 800 ShiftRight)
 
   min1 (chord qwerty_chord [)
   eq1 (chord qwerty_chord ])
@@ -74,7 +74,7 @@ z    x    c    v    b    n    m    ,    .    /
   qwerty (layer-switch qwerty)
   base (layer-switch base)
 
-  util (one-shot 1000 (layer-while-held utility))
+  util (one-shot 800 (layer-while-held utility))
 
   qmark (fork S-/ (unshift /) (lshft rshft))
 
