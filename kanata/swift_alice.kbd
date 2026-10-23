@@ -74,7 +74,7 @@ z    x    c    v    b    n    m    ,    .    /
   qwerty (layer-switch qwerty)
   base (layer-switch base)
 
-  util (one-shot 1000 (layer-while-held utility))
+  util (layer-while-held utility)
 
   qmark (fork S-/ (unshift /) (lshft rshft))
 
